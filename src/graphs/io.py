@@ -1,0 +1,1 @@
+# carregar/validar e “derreter” o CSV
