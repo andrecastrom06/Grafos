@@ -1,0 +1,660 @@
+[
+  {
+    "bairro": "Recife",
+    "grau": 16,
+    "ordem_ego": 17,
+    "tamanho_ego": 121,
+    "densidade_ego": 0.8897
+  },
+  {
+    "bairro": "Santo Amaro",
+    "grau": 1,
+    "ordem_ego": 2,
+    "tamanho_ego": 1,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Boa Vista",
+    "grau": 21,
+    "ordem_ego": 22,
+    "tamanho_ego": 141,
+    "densidade_ego": 0.6104
+  },
+  {
+    "bairro": "Cabanga",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Ilha do Leite",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Paissandu",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Santo Antônio",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "São José",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Soledade",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Coelhos",
+    "grau": 16,
+    "ordem_ego": 17,
+    "tamanho_ego": 121,
+    "densidade_ego": 0.8897
+  },
+  {
+    "bairro": "Ilha Joana Bezerra",
+    "grau": 1,
+    "ordem_ego": 2,
+    "tamanho_ego": 1,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Arruda",
+    "grau": 23,
+    "ordem_ego": 24,
+    "tamanho_ego": 156,
+    "densidade_ego": 0.5652
+  },
+  {
+    "bairro": "Campina do Barreto",
+    "grau": 8,
+    "ordem_ego": 9,
+    "tamanho_ego": 36,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Campo Grande",
+    "grau": 8,
+    "ordem_ego": 9,
+    "tamanho_ego": 36,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Encruzilhada",
+    "grau": 8,
+    "ordem_ego": 9,
+    "tamanho_ego": 36,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Hipódromo",
+    "grau": 8,
+    "ordem_ego": 9,
+    "tamanho_ego": 36,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Peixinhos",
+    "grau": 8,
+    "ordem_ego": 9,
+    "tamanho_ego": 36,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Ponto de Parada",
+    "grau": 8,
+    "ordem_ego": 9,
+    "tamanho_ego": 36,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Rosarinho",
+    "grau": 8,
+    "ordem_ego": 9,
+    "tamanho_ego": 36,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Torreão",
+    "grau": 8,
+    "ordem_ego": 9,
+    "tamanho_ego": 36,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Água Fria",
+    "grau": 23,
+    "ordem_ego": 24,
+    "tamanho_ego": 156,
+    "densidade_ego": 0.5652
+  },
+  {
+    "bairro": "Alto Santa Teresinha",
+    "grau": 8,
+    "ordem_ego": 9,
+    "tamanho_ego": 36,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Bomba do Hemetério",
+    "grau": 8,
+    "ordem_ego": 9,
+    "tamanho_ego": 36,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Cajueiro",
+    "grau": 8,
+    "ordem_ego": 9,
+    "tamanho_ego": 36,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Fundão",
+    "grau": 8,
+    "ordem_ego": 9,
+    "tamanho_ego": 36,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Porto da Madeira",
+    "grau": 8,
+    "ordem_ego": 9,
+    "tamanho_ego": 36,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Beberibe",
+    "grau": 8,
+    "ordem_ego": 9,
+    "tamanho_ego": 36,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Dois Unidos",
+    "grau": 8,
+    "ordem_ego": 9,
+    "tamanho_ego": 36,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Linha do Tiro",
+    "grau": 8,
+    "ordem_ego": 9,
+    "tamanho_ego": 36,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Aflitos",
+    "grau": 30,
+    "ordem_ego": 31,
+    "tamanho_ego": 240,
+    "densidade_ego": 0.5161
+  },
+  {
+    "bairro": "Alto do Mandu",
+    "grau": 15,
+    "ordem_ego": 16,
+    "tamanho_ego": 120,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Apipucos",
+    "grau": 15,
+    "ordem_ego": 16,
+    "tamanho_ego": 120,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Casa Amarela",
+    "grau": 15,
+    "ordem_ego": 16,
+    "tamanho_ego": 120,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Casa Forte",
+    "grau": 15,
+    "ordem_ego": 16,
+    "tamanho_ego": 120,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Derby",
+    "grau": 15,
+    "ordem_ego": 16,
+    "tamanho_ego": 120,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Dois Irmãos",
+    "grau": 15,
+    "ordem_ego": 16,
+    "tamanho_ego": 120,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Espinheiro",
+    "grau": 15,
+    "ordem_ego": 16,
+    "tamanho_ego": 120,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Graças",
+    "grau": 15,
+    "ordem_ego": 16,
+    "tamanho_ego": 120,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Jaqueira",
+    "grau": 15,
+    "ordem_ego": 16,
+    "tamanho_ego": 120,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Monteiro",
+    "grau": 15,
+    "ordem_ego": 16,
+    "tamanho_ego": 120,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Parnamirim",
+    "grau": 15,
+    "ordem_ego": 16,
+    "tamanho_ego": 120,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Poço",
+    "grau": 15,
+    "ordem_ego": 16,
+    "tamanho_ego": 120,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Santana",
+    "grau": 15,
+    "ordem_ego": 16,
+    "tamanho_ego": 120,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Sítio dos Pintos",
+    "grau": 15,
+    "ordem_ego": 16,
+    "tamanho_ego": 120,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Tamarineira",
+    "grau": 15,
+    "ordem_ego": 16,
+    "tamanho_ego": 120,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Alto José Bonifácio",
+    "grau": 19,
+    "ordem_ego": 20,
+    "tamanho_ego": 130,
+    "densidade_ego": 0.6842
+  },
+  {
+    "bairro": "Alto José do Pinho",
+    "grau": 4,
+    "ordem_ego": 5,
+    "tamanho_ego": 10,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Mangabeira",
+    "grau": 4,
+    "ordem_ego": 5,
+    "tamanho_ego": 10,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Morro da Conceição",
+    "grau": 4,
+    "ordem_ego": 5,
+    "tamanho_ego": 10,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Vasco da Gama",
+    "grau": 4,
+    "ordem_ego": 5,
+    "tamanho_ego": 10,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Brejo da Guabiraba",
+    "grau": 22,
+    "ordem_ego": 23,
+    "tamanho_ego": 148,
+    "densidade_ego": 0.585
+  },
+  {
+    "bairro": "Brejo de Beberibe",
+    "grau": 7,
+    "ordem_ego": 8,
+    "tamanho_ego": 28,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Córrego do Jenipapo",
+    "grau": 7,
+    "ordem_ego": 8,
+    "tamanho_ego": 28,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Guabiraba",
+    "grau": 7,
+    "ordem_ego": 8,
+    "tamanho_ego": 28,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Macaxeira",
+    "grau": 7,
+    "ordem_ego": 8,
+    "tamanho_ego": 28,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Nova Descoberta",
+    "grau": 7,
+    "ordem_ego": 8,
+    "tamanho_ego": 28,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Passarinho",
+    "grau": 7,
+    "ordem_ego": 8,
+    "tamanho_ego": 28,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Pau-Ferro",
+    "grau": 7,
+    "ordem_ego": 8,
+    "tamanho_ego": 28,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Cordeiro",
+    "grau": 21,
+    "ordem_ego": 22,
+    "tamanho_ego": 141,
+    "densidade_ego": 0.6104
+  },
+  {
+    "bairro": "Ilha do Retiro",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Iputinga",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Madalena",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Prado",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Torre",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Zumbi",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Engenho do Meio",
+    "grau": 16,
+    "ordem_ego": 17,
+    "tamanho_ego": 121,
+    "densidade_ego": 0.8897
+  },
+  {
+    "bairro": "Torrões",
+    "grau": 1,
+    "ordem_ego": 2,
+    "tamanho_ego": 1,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Caxangá",
+    "grau": 17,
+    "ordem_ego": 18,
+    "tamanho_ego": 123,
+    "densidade_ego": 0.8039
+  },
+  {
+    "bairro": "Cidade Universitária",
+    "grau": 2,
+    "ordem_ego": 3,
+    "tamanho_ego": 3,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Várzea",
+    "grau": 2,
+    "ordem_ego": 3,
+    "tamanho_ego": 3,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Afogados",
+    "grau": 19,
+    "ordem_ego": 20,
+    "tamanho_ego": 130,
+    "densidade_ego": 0.6842
+  },
+  {
+    "bairro": "Bongi",
+    "grau": 4,
+    "ordem_ego": 5,
+    "tamanho_ego": 10,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Mangueira",
+    "grau": 4,
+    "ordem_ego": 5,
+    "tamanho_ego": 10,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Mustardinha",
+    "grau": 4,
+    "ordem_ego": 5,
+    "tamanho_ego": 10,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "San Martin",
+    "grau": 4,
+    "ordem_ego": 5,
+    "tamanho_ego": 10,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Areias",
+    "grau": 18,
+    "ordem_ego": 19,
+    "tamanho_ego": 126,
+    "densidade_ego": 0.7368
+  },
+  {
+    "bairro": "Caçote",
+    "grau": 3,
+    "ordem_ego": 4,
+    "tamanho_ego": 6,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Estância",
+    "grau": 3,
+    "ordem_ego": 4,
+    "tamanho_ego": 6,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Jiquiá",
+    "grau": 3,
+    "ordem_ego": 4,
+    "tamanho_ego": 6,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Barro",
+    "grau": 21,
+    "ordem_ego": 22,
+    "tamanho_ego": 141,
+    "densidade_ego": 0.6104
+  },
+  {
+    "bairro": "Coqueiral",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Curado",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Jardim São Paulo",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Sancho",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Tejipió",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Totó",
+    "grau": 6,
+    "ordem_ego": 7,
+    "tamanho_ego": 21,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Boa Viagem",
+    "grau": 19,
+    "ordem_ego": 20,
+    "tamanho_ego": 130,
+    "densidade_ego": 0.6842
+  },
+  {
+    "bairro": "Brasília Teimosa",
+    "grau": 4,
+    "ordem_ego": 5,
+    "tamanho_ego": 10,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Imbiribeira",
+    "grau": 4,
+    "ordem_ego": 5,
+    "tamanho_ego": 10,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Ipsep",
+    "grau": 4,
+    "ordem_ego": 5,
+    "tamanho_ego": 10,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Pina",
+    "grau": 4,
+    "ordem_ego": 5,
+    "tamanho_ego": 10,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Ibura",
+    "grau": 17,
+    "ordem_ego": 18,
+    "tamanho_ego": 123,
+    "densidade_ego": 0.8039
+  },
+  {
+    "bairro": "Jordão",
+    "grau": 2,
+    "ordem_ego": 3,
+    "tamanho_ego": 3,
+    "densidade_ego": 1.0
+  },
+  {
+    "bairro": "Cohab",
+    "grau": 2,
+    "ordem_ego": 3,
+    "tamanho_ego": 3,
+    "densidade_ego": 1.0
+  }
+]

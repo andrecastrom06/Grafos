@@ -15,13 +15,16 @@ class Grafo:
         self.adj[u].append((v, logradouro))
         self.adj[v].append((u, logradouro))
 
-    def ordem(self): #esperado 94
+    def vizinhos(self, u):
+        return [v for v, _ in self.adj.get(u, [])]
+
+    def ordem(self):
         return len(self.adj)
 
-    def tamanho(self): #esperado 449
+    def tamanho(self):
         return sum(len(viz) for viz in self.adj.values())//2
 
-    def densidade(self): #esperado 0.1027
+    def densidade(self):
         V = self.ordem()
         E = self.tamanho()
         if V < 2:
@@ -68,3 +71,21 @@ for micro, grupo in df_microrregiao.groupby("microrregiao"):
 
 with open("../out/microrregioes.json", "w", encoding="utf-8") as f:
     json.dump(resultados, f, ensure_ascii=False, indent=2)
+
+ego_resultados = []
+for bairro in grafo.adj.keys():
+    viz = grafo.vizinhos(bairro)
+    ego_vertices = [bairro] + viz
+    sg = grafo.subgrafo(ego_vertices)
+
+    ego_resultados.append({
+        "bairro": bairro,
+        "grau": len(viz),
+        "ordem_ego": sg.ordem(),
+        "tamanho_ego": sg.tamanho(),
+        "densidade_ego": round(sg.densidade(), 4)
+    })
+
+df_ego = pd.DataFrame(ego_resultados)
+with open("../out/ego_bairros.json", "w", encoding="utf-8") as f:
+    json.dump(ego_resultados, f, ensure_ascii=False, indent=2)
