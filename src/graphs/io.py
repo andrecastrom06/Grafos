@@ -25,7 +25,7 @@ try:
     )
 
     df_final.drop_duplicates(subset=['bairro'], inplace=True)
-    df_final.sort_values(by='bairro', inplace=True)
+    df_final.sort_values(by='microrregiao', inplace=True)
     df_final.reset_index(drop=True, inplace=True)
 
     df_final.to_csv(output_filename, index=False)
