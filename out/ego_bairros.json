@@ -42,14 +42,14 @@
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Santo Antônio",
+    "bairro": "Santo Antonio",
     "grau": 6,
     "ordem_ego": 7,
     "tamanho_ego": 21,
     "densidade_ego": 1.0
   },
   {
-    "bairro": "São José",
+    "bairro": "Sao Jose",
     "grau": 6,
     "ordem_ego": 7,
     "tamanho_ego": 21,
@@ -105,7 +105,7 @@
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Hipódromo",
+    "bairro": "Hipodromo",
     "grau": 8,
     "ordem_ego": 9,
     "tamanho_ego": 36,
@@ -133,14 +133,14 @@
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Torreão",
+    "bairro": "Torreao",
     "grau": 8,
     "ordem_ego": 9,
     "tamanho_ego": 36,
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Água Fria",
+    "bairro": "Agua Fria",
     "grau": 23,
     "ordem_ego": 24,
     "tamanho_ego": 156,
@@ -154,7 +154,7 @@
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Bomba do Hemetério",
+    "bairro": "Bomba do Hemeterio",
     "grau": 8,
     "ordem_ego": 9,
     "tamanho_ego": 36,
@@ -168,7 +168,7 @@
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Fundão",
+    "bairro": "Fundao",
     "grau": 8,
     "ordem_ego": 9,
     "tamanho_ego": 36,
@@ -245,7 +245,7 @@
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Dois Irmãos",
+    "bairro": "Dois Irmaos",
     "grau": 15,
     "ordem_ego": 16,
     "tamanho_ego": 120,
@@ -259,7 +259,7 @@
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Graças",
+    "bairro": "Gracas",
     "grau": 15,
     "ordem_ego": 16,
     "tamanho_ego": 120,
@@ -287,7 +287,7 @@
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Poço",
+    "bairro": "Poco",
     "grau": 15,
     "ordem_ego": 16,
     "tamanho_ego": 120,
@@ -301,7 +301,7 @@
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Sítio dos Pintos",
+    "bairro": "Sitio dos Pintos",
     "grau": 15,
     "ordem_ego": 16,
     "tamanho_ego": 120,
@@ -315,14 +315,14 @@
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Alto José Bonifácio",
+    "bairro": "Alto Jose Bonifacio",
     "grau": 19,
     "ordem_ego": 20,
     "tamanho_ego": 130,
     "densidade_ego": 0.6842
   },
   {
-    "bairro": "Alto José do Pinho",
+    "bairro": "Alto Jose do Pinho",
     "grau": 4,
     "ordem_ego": 5,
     "tamanho_ego": 10,
@@ -336,7 +336,7 @@
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Morro da Conceição",
+    "bairro": "Morro da Conceicao",
     "grau": 4,
     "ordem_ego": 5,
     "tamanho_ego": 10,
@@ -364,7 +364,7 @@
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Córrego do Jenipapo",
+    "bairro": "Corrego do Jenipapo",
     "grau": 7,
     "ordem_ego": 8,
     "tamanho_ego": 28,
@@ -462,28 +462,28 @@
     "densidade_ego": 0.8897
   },
   {
-    "bairro": "Torrões",
+    "bairro": "Torroes",
     "grau": 1,
     "ordem_ego": 2,
     "tamanho_ego": 1,
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Caxangá",
+    "bairro": "Caxanga",
     "grau": 17,
     "ordem_ego": 18,
     "tamanho_ego": 123,
     "densidade_ego": 0.8039
   },
   {
-    "bairro": "Cidade Universitária",
+    "bairro": "Cidade Universitaria",
     "grau": 2,
     "ordem_ego": 3,
     "tamanho_ego": 3,
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Várzea",
+    "bairro": "Varzea",
     "grau": 2,
     "ordem_ego": 3,
     "tamanho_ego": 3,
@@ -532,21 +532,21 @@
     "densidade_ego": 0.7368
   },
   {
-    "bairro": "Caçote",
+    "bairro": "Cacote",
     "grau": 3,
     "ordem_ego": 4,
     "tamanho_ego": 6,
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Estância",
+    "bairro": "Estancia",
     "grau": 3,
     "ordem_ego": 4,
     "tamanho_ego": 6,
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Jiquiá",
+    "bairro": "Jiquia",
     "grau": 3,
     "ordem_ego": 4,
     "tamanho_ego": 6,
@@ -574,7 +574,7 @@
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Jardim São Paulo",
+    "bairro": "Jardim Sao Paulo",
     "grau": 6,
     "ordem_ego": 7,
     "tamanho_ego": 21,
@@ -588,14 +588,14 @@
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Tejipió",
+    "bairro": "Tejipio",
     "grau": 6,
     "ordem_ego": 7,
     "tamanho_ego": 21,
     "densidade_ego": 1.0
   },
   {
-    "bairro": "Totó",
+    "bairro": "Toto",
     "grau": 6,
     "ordem_ego": 7,
     "tamanho_ego": 21,
@@ -609,7 +609,7 @@
     "densidade_ego": 0.6842
   },
   {
-    "bairro": "Brasília Teimosa",
+    "bairro": "Brasilia Teimosa",
     "grau": 4,
     "ordem_ego": 5,
     "tamanho_ego": 10,
@@ -644,7 +644,7 @@
     "densidade_ego": 0.8039
   },
   {
-    "bairro": "Jordão",
+    "bairro": "Jordao",
     "grau": 2,
     "ordem_ego": 3,
     "tamanho_ego": 3,
