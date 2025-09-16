@@ -1,4 +1,4 @@
-#construção dos json /out
+# construção dos json /out
 
 import pandas as pd
 import json
@@ -17,12 +17,15 @@ class Grafo:
 
     def vizinhos(self, u):
         return [v for v, _ in self.adj.get(u, [])]
+    
+    def grau(self, u):
+        return len(self.adj.get(u, []))
 
     def ordem(self):
         return len(self.adj)
 
     def tamanho(self):
-        return sum(len(viz) for viz in self.adj.values())//2
+        return sum(len(viz) for viz in self.adj.values()) // 2
 
     def densidade(self):
         V = self.ordem()
@@ -33,6 +36,10 @@ class Grafo:
     
     def subgrafo(self, vertices):
         sg = Grafo()
+        for v in vertices:
+            if v not in sg.adj:
+                sg.adj[v] = []
+                
         vertices_set = set(vertices)
         for u in vertices_set:
             if u in self.adj:
@@ -41,51 +48,65 @@ class Grafo:
                         sg.adicionar_aresta(u, v, logradouro)
         return sg
 
-
-df = pd.read_csv("../data/adjacencias_bairros.csv")  
+df_adjacencias = pd.read_csv("../data/adjacencias_bairros.csv")
+df_microrregiao = pd.read_csv("../data/bairros_unique.csv")
 
 grafo = Grafo()
 
-for _, row in df.iterrows():
+for _, row in df_adjacencias.iterrows():
     grafo.adicionar_aresta(row["bairro_origem"], row["bairro_destino"], row["logradouro"])
 
-with open("../out/recife_global.json", "w") as f:
-    f.write("{\n")
-    f.write("  \"Ordem\": " + str(grafo.ordem()) + ",\n")
-    f.write("  \"Tamanho\": " + str(grafo.tamanho()) + ",\n")
-    f.write("  \"Densidade\": " + str(grafo.densidade()) + "\n")
-    f.write("}")
+for bairro in df_microrregiao['bairro']:
+    if bairro not in grafo.adj:
+        grafo.adj[bairro] = []
+        
+dados_globais = {
+    "ordem": grafo.ordem(),
+    "tamanho": grafo.tamanho(),
+    "densidade": round(grafo.densidade(), 4)
+}
+with open("../out/recife_global.json", "w", encoding="utf-8") as f:
+    json.dump(dados_globais, f, ensure_ascii=False, indent=2)
 
-df_microrregiao = pd.read_csv("../data/bairros_unique.csv")
-
-resultados = []
+resultados_microrregiao = []
 for micro, grupo in df_microrregiao.groupby("microrregiao"):
     bairros = grupo["bairro"].tolist()
     sg = grafo.subgrafo(bairros)
-    resultados.append({
+    resultados_microrregiao.append({
         "microrregiao": int(micro),
         "ordem": sg.ordem(),
         "tamanho": sg.tamanho(),
         "densidade": round(sg.densidade(), 4)
     })
-
 with open("../out/microrregioes.json", "w", encoding="utf-8") as f:
-    json.dump(resultados, f, ensure_ascii=False, indent=2)
+    json.dump(resultados_microrregiao, f, ensure_ascii=False, indent=2)
 
-ego_resultados = []
-for bairro in grafo.adj.keys():
-    viz = grafo.vizinhos(bairro)
-    ego_vertices = [bairro] + viz
-    sg = grafo.subgrafo(ego_vertices)
+resultados_ego = []
+for bairro in sorted(grafo.adj.keys()):
+    vizinhos = grafo.vizinhos(bairro)
+    ego_vertices = [bairro] + vizinhos
+    sg_ego = grafo.subgrafo(ego_vertices)
 
-    ego_resultados.append({
+    resultados_ego.append({
         "bairro": bairro,
-        "grau": len(viz),
-        "ordem_ego": sg.ordem(),
-        "tamanho_ego": sg.tamanho(),
-        "densidade_ego": round(sg.densidade(), 4)
+        "grau": grafo.grau(bairro),
+        "ordem_ego": sg_ego.ordem(),
+        "tamanho_ego": sg_ego.tamanho(),
+        "densidade_ego": round(sg_ego.densidade(), 4)
     })
+df_ego = pd.DataFrame(resultados_ego)
+df_ego.to_csv("../out/ego_bairro.csv", index=False, encoding='utf-8')
 
-df_ego = pd.DataFrame(ego_resultados)
-with open("../out/ego_bairros.json", "w", encoding="utf-8") as f:
-    json.dump(ego_resultados, f, ensure_ascii=False, indent=2)
+graus_data = [{"bairro": bairro, "grau": grafo.grau(bairro)} for bairro in sorted(grafo.adj.keys())]
+df_graus = pd.DataFrame(graus_data).sort_values(by='grau', ascending=False)
+df_graus.to_csv('../out/graus.csv', index=False, encoding='utf-8')
+
+idx_mais_denso = df_ego['densidade_ego'].idxmax()
+bairro_mais_denso_info = df_ego.loc[idx_mais_denso]
+
+bairro_maior_grau_info = df_graus.iloc[0]
+
+print(f"Bairro mais denso: {bairro_mais_denso_info['bairro']} (Densidade Ego: {bairro_mais_denso_info['densidade_ego']})")
+print(f"Bairro com maior grau: {bairro_maior_grau_info['bairro']} (Grau: {bairro_maior_grau_info['grau']})")
+
+print("\n✅ Análise concluída com sucesso!")
