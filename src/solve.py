@@ -106,7 +106,6 @@ bairro_mais_denso_info = df_ego.loc[idx_mais_denso]
 
 bairro_maior_grau_info = df_graus.iloc[0]
 
-#Devemos usar isso posteriormente na vizualização, imagino eu, por enquanto ta no terminal
 print(f"Bairro mais denso: {bairro_mais_denso_info['bairro']} (Densidade Ego: {bairro_mais_denso_info['densidade_ego']})")
 print(f"Bairro com maior grau: {bairro_maior_grau_info['bairro']} (Grau: {bairro_maior_grau_info['grau']})")
 
