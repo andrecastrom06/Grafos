@@ -1,21 +1,40 @@
-# (bônus) visualizações/UX
-# tem que corrigir
-import pandas as pd
-import networkx as nx
-import matplotlib.pyplot as plt
+import json
+from pyvis.network import Network
+import webbrowser
+import os
 
-df = pd.read_csv("../data/adjacencias_bairros.csv")  
+def main():
+    with open('../out/percurso_nova_descoberta_setubal.json', encoding='utf-8') as f:
+        percurso = json.load(f)
 
-G = nx.Graph()
+    caminho = percurso['caminho']
+    ruas = percurso.get('ruas', [])
 
-for _, row in df.iterrows():
-    G.add_edge(row["bairro_origem"], row["bairro_destino"], logradouro=row["logradouro"])
+    net = Network(height="600px", width="100%", directed=True, bgcolor="#ffffff")
+    net.barnes_hut()
 
-pos = nx.spring_layout(G, seed=42)
+    for bairro in caminho:
+        net.add_node(bairro, label=bairro, color="#1f77b4", shape="ellipse")
 
-nx.draw(G, pos, with_labels=True, node_size=2000, node_color="lightblue", font_size=10)
+    for i in range(len(caminho) - 1):
+        origem = caminho[i]
+        destino = caminho[i + 1]
+        rua = ruas[i] if i < len(ruas) else ""
+        peso = percurso.get("pesos", [])[i] if "pesos" in percurso else ""
+        label = f"{rua} ({peso})" if peso else rua
+        net.add_edge(origem, destino,
+                    label=label,
+                    color="red",
+                    width=3)
 
-edge_labels = nx.get_edge_attributes(G, "logradouro")
-nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=8)
 
-plt.show()
+
+    net.save_graph("../out/arvore_percurso.html")
+    print("Arquivo salvo")
+
+    net.save_graph("../out/arvore_percurso.html")
+    webbrowser.open(f"file://{os.path.abspath('../out/arvore_percurso.html')}")
+
+
+if __name__ == "__main__":
+    main()
