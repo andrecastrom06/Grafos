@@ -1,0 +1,18 @@
+{
+  "bairro_X": "Madalena",
+  "bairro_Y": "Boa Viagem",
+  "custo": 6.0,
+  "caminho": [
+    "Madalena",
+    "Cordeiro",
+    "Boa Viagem"
+  ],
+  "ruas": [
+    "av.cordeiro+av.madalena",
+    "av.herculano_bandeira+av.joana_bezerra+av.agamenon_magalhaes+av.caxangá"
+  ],
+  "pesos": [
+    2.0,
+    4.0
+  ]
+}

@@ -122,7 +122,7 @@ with col2:
         plt.xlabel("Grau do bairro")
         plt.ylabel("Número de bairros")
         plt.title("Distribuição dos graus dos bairros")
-        st.image(plot_to_bytes(fig), use_container_width=True)
+        st.image(plot_to_bytes(fig), width="stretch")
 
     elif opcao == "Buscar por bairro":
         st.subheader("Buscar ego-grafo por bairro")

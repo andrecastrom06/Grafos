@@ -3,7 +3,6 @@
 import pandas as pd
 import heapq
 import json
-import os
 
 def load_graph(path):
     df = pd.read_csv(path)
