@@ -121,7 +121,7 @@ with col2:
     
     # Container da imagem de capa
     with st.container():
-        st.image("../foto_capa.jpg", use_column_width=True)
+        st.image("../foto_capa.jpg", width='stretch')
         st.markdown("---")
 
     # Container de seleção de visualização
@@ -240,7 +240,7 @@ with col2:
                 }
                 for i, (bairro, vizinhos) in enumerate(top10)
             ]),
-            use_container_width=True
+            width='stretch'
         )
 
         top_bairros = set(b for b,_ in top10)
