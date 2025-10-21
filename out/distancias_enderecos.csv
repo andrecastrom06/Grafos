@@ -1,6 +1,0 @@
-bairro_X,bairro_Y,custo,caminho,ruas
-Aflitos,Arruda,3.0,Aflitos->Arruda,av.norte_miguel_arraes_de_alencar+r.doutor_agostinho_campelo
-Ilha do Retiro,Jordao,8.0,Ilha do Retiro->Cordeiro->Ibura->Jordao,av.cordeiro+av.ilha_do_retiro->5av.caxangá+r.sao_miguel+br-101->1av.recife+av.prof.luiz_freire
-Recife,Santo Amaro,1.0,Recife->Santo Amaro,p.mauricio_nassau+p.limoeiro
-Linha do Tiro,Vasco da Gama,11.0,Linha do Tiro->Agua Fria->Alto Jose Bonifacio->Vasco da Gama,2av.beberibe+av.hildebrando_vasconcelos->2av.norte_miguel_arraes_de_alencar+r.correa_de_brito+r.joaquim_nabuco->r.josé_bonifácio+av.boa_viagem+av.vasco_da_gama
-Nova Descoberta,Boa Viagem,4.0,Nova Descoberta->Brejo da Guabiraba->Boa Viagem,av.brejo+av.nova_descoberta->2av.norte_miguel_arraes_de_alencar+av.dois_irmaos

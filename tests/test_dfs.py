@@ -1,1 +1,0 @@
-# (obrigatórios, mínimos)
