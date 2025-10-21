@@ -1,1 +1,0 @@
-# estrutura: lista de adjacência
