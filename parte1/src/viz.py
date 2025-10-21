@@ -121,7 +121,7 @@ with col2:
     
     # Container da imagem de capa
     with st.container():
-        st.image("../foto_capa.jpg", width='stretch')
+        st.image("../../foto_capa.jpg", width='stretch')
         st.markdown("---")
 
     # Container de seleção de visualização
