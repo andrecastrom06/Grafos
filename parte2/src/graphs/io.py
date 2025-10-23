@@ -27,6 +27,7 @@ try:
             print(f"- {col}")
         print("O arquivo filtrado NÃO foi gerado.")
         sys.exit() 
+
     print(f"Filtrando pelas colunas necessárias para o processo: {required_cols}")
     df_filtrado = df[required_cols].copy() 
     linhas_antes_null = len(df_filtrado)
@@ -34,6 +35,7 @@ try:
     df_filtrado = df_filtrado.dropna()
     linhas_removidas_null = linhas_antes_null - len(df_filtrado)
     print(f"{linhas_removidas_null} linhas com valores nulos foram removidas.")
+
     if not df_filtrado.empty:
         print("Convertendo 'departure_time' e 'arrival_time' para formato de data...")
         
@@ -45,10 +47,12 @@ try:
         linhas_removidas_nat = linhas_antes_nat - len(df_filtrado)
         if linhas_removidas_nat > 0:
             print(f"{linhas_removidas_nat} linhas removidas por terem datas inválidas ('NaT').")
+
         print("Calculando a duração do voo em minutos...")
         duracao_timedelta = df_filtrado['arrival_time'] - df_filtrado['departure_time']
         df_filtrado['duration_minutes'] = (duracao_timedelta.dt.total_seconds() / 60).astype(int)
         print(f"Nova coluna 'duration_minutes' criada.")
+
         start_date = '2022-05-01'
         end_date = '2022-05-15'
         print(f"Filtrando 'departure_time' entre {start_date} e {end_date}...")
@@ -59,10 +63,18 @@ try:
         
         linhas_removidas_data = linhas_antes_data - len(df_filtrado)
         print(f"{linhas_removidas_data} linhas removidas pelo filtro de data.")
+        print(f"Removendo voos duplicados (com base em 'flight_number')... (Total atual: {len(df_filtrado)} linhas)")
+        linhas_antes_duplicatas = len(df_filtrado)
+        df_filtrado = df_filtrado.drop_duplicates(subset=['flight_number'], keep='first')
+        linhas_removidas_duplicatas = linhas_antes_duplicatas - len(df_filtrado)
+        print(f"{linhas_removidas_duplicatas} linhas duplicadas (flight_number) foram removidas.")
+
     else:
         print("DataFrame vazio após remoção de nulos. Pulando filtros de data.")
+
     print(f"Selecionando colunas finais para o output: {final_cols}")
     df_filtrado = df_filtrado[final_cols]
+    
     df_filtrado.to_csv(output_file, index=False)
     
     print("\n--- SUCESSO ---")

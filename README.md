@@ -18,5 +18,4 @@ Entre na pasta Parte1 ou Parte2, rode os códigos python com o comando:
     - streamlit run viz.py
 
 # DataBases parte 2
-  - [flight_filtrado](https://drive.google.com/file/d/1Z4z2rIgD9dFcslAQ9N7xjUda0QQuBJau/view?usp=sharing)
   - [flight](https://drive.google.com/file/d/12aa43trn9J-EoHoBEkpdPzH3Sfpb9p54/view?usp=sharing)
