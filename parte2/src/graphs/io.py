@@ -53,16 +53,6 @@ try:
         df_filtrado['duration_minutes'] = (duracao_timedelta.dt.total_seconds() / 60).astype(int)
         print(f"Nova coluna 'duration_minutes' criada.")
 
-        start_date = '2022-05-01'
-        end_date = '2022-05-15'
-        print(f"Filtrando 'departure_time' entre {start_date} e {end_date}...")
-        
-        linhas_antes_data = len(df_filtrado)
-        mask = (df_filtrado['departure_time'] >= start_date) & (df_filtrado['departure_time'] <= end_date)
-        df_filtrado = df_filtrado[mask]
-        
-        linhas_removidas_data = linhas_antes_data - len(df_filtrado)
-        print(f"{linhas_removidas_data} linhas removidas pelo filtro de data.")
         print(f"Removendo voos duplicados (com base em 'flight_number')... (Total atual: {len(df_filtrado)} linhas)")
         linhas_antes_duplicatas = len(df_filtrado)
         df_filtrado = df_filtrado.drop_duplicates(subset=['flight_number'], keep='first')

@@ -59,14 +59,11 @@ def main():
     
     print("\n--- AMOSTRA DA LISTA DE ADJACÊNCIA (GRAFO) ---")
     
-    count = 0
     if not graph:
         print("O grafo está vazio.")
         return
         
     for origem, arestas in graph.items():
-        if count >= 5: 
-            break
         
         print(f"\nNó (Origem): '{origem}'")
         if not arestas:
@@ -78,8 +75,6 @@ def main():
                     print(f"     ... (e mais {len(arestas) - 3})")
                     break
                 print(f"     - Destino: '{destino}' (Peso: {peso}, Voo: {voo})")
-        
-        count += 1
 
 if __name__ == '__main__':
     main()
