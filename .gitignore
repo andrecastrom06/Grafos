@@ -4,3 +4,5 @@ mvenv
 vnv
 /lib
 lib
+/parte2/data/flight.csv
+/parte2/data/flight_filtrado.csv
