@@ -1,28 +1,5 @@
-# (obrigatórios, mínimos)
-import pandas as pd
-import json
+import unittest
 import heapq
-
-def subgraph(adj, allowed_nodes):
-    """Filtra o grafo para conter apenas os nós em allowed_nodes"""
-    sub = {}
-    for u in allowed_nodes:
-        if u in adj:
-            # mantem apenas vizinhos dentro do conjunto permitido
-            sub[u] = [(v, w, log) for v, w, log in adj[u] if v in allowed_nodes]
-    return sub
-
-def load_graph(path):
-    df = pd.read_csv(path)
-    adj = {}
-    for _, row in df.iterrows():
-        u = str(row['bairro_origem']).strip()
-        v = str(row['bairro_destino']).strip()
-        w = float(row['peso']) if 'peso' in df.columns else 1.0
-        log = str(row['logradouro']).strip() if 'logradouro' in df.columns else ''
-        adj.setdefault(u, []).append((v, w, log))
-        adj.setdefault(v, []).append((u, w, log))
-    return adj
 
 def dijkstra(adj, src, dst):
     if src not in adj or dst not in adj:
@@ -56,28 +33,91 @@ def dijkstra(adj, src, dst):
     weights.reverse()
     return dist[dst], path, streets, weights
 
-def main():
-    adj = load_graph('../data/adjacencias_bairros.csv')
+class TestDijkstra(unittest.TestCase):
 
-    allowed = {"Madalena", "Cordeiro", "Boa Viagem"}
+    @classmethod
+    def setUpClass(cls):
+        """
+        Configura um grafo de teste único (mock) para todos os testes.
+        O formato (vizinho, peso, metadata) é o mesmo.
+        """
+        cls.mock_adj = {
+            'A': [('B', 2, 'Rua A-B'), ('C', 10, 'Rua A-C')],
+            'B': [('C', 3, 'Rua B-C')],
+            'C': [],
+            'D': [('E', 1, 'Rua D-E')],
+            'E': []
+        }
+        cls.mock_adj.setdefault('A', [])
+        cls.mock_adj.setdefault('B', [])
+        cls.mock_adj.setdefault('C', [])
+        cls.mock_adj.setdefault('D', [])
+        cls.mock_adj.setdefault('E', [])
 
-    sub = subgraph(adj, allowed)
 
-    cost, path, streets, weights = dijkstra(sub, "Madalena", "Boa Viagem")
+    def test_shortest_path_multi_step(self):
+        print("\nTestando: test_shortest_path_multi_step (A -> C)")
+        src, dst = 'A', 'C'
+        
+        cost, path, streets, weights = dijkstra(self.mock_adj, src, dst)
+        
+        self.assertEqual(cost, 5, "O custo deve ser 5 (via 'B')")
+        self.assertEqual(path, ['A', 'B', 'C'], "O caminho deve ser ['A', 'B', 'C']")
+        self.assertEqual(streets, ['Rua A-B', 'Rua B-C'], "As ruas devem corresponder ao caminho")
+        self.assertEqual(weights, [2, 3], "Os pesos devem corresponder ao caminho")
 
-    print("Custo:", cost)
-    print("Caminho:", " -> ".join(path))
-    print("Ruas:", " -> ".join(streets))
+    def test_shortest_path_direct(self):
+        print("\nTestando: test_shortest_path_direct (A -> B)")
+        src, dst = 'A', 'B'
+        
+        cost, path, streets, weights = dijkstra(self.mock_adj, src, dst)
+        
+        self.assertEqual(cost, 2)
+        self.assertEqual(path, ['A', 'B'])
+        self.assertEqual(streets, ['Rua A-B'])
+        self.assertEqual(weights, [2])
 
-    with open('../out/percurso_subgrafo.json','w',encoding='utf-8') as f:
-        json.dump({
-            'bairro_X': "Madalena",
-            'bairro_Y': "Boa Viagem",
-            'custo': cost,
-            'caminho': path,
-            'ruas': streets,
-            'pesos': weights
-        }, f, ensure_ascii=False, indent=2)
+    def test_no_path_found(self):
+        print("\nTestando: test_no_path_found (A -> D)")
+        src, dst = 'A', 'D'
+        
+        cost, path, streets, weights = dijkstra(self.mock_adj, src, dst)
+        
+        self.assertEqual(cost, float('inf'))
+        self.assertEqual(path, [])
+        self.assertEqual(streets, [])
+        self.assertEqual(weights, [])
+
+    def test_invalid_source_node(self):
+        print("\nTestando: test_invalid_source_node (Z -> A)")
+        src, dst = 'Z', 'A'
+        
+        cost, path, _, _ = dijkstra(self.mock_adj, src, dst)
+        
+        self.assertEqual(cost, float('inf'))
+        self.assertEqual(path, [])
+
+    def test_invalid_destination_node(self):
+        print("\nTestando: test_invalid_destination_node (A -> Z)")
+        src, dst = 'A', 'Z'
+        
+        cost, path, _, _ = dijkstra(self.mock_adj, src, dst)
+        
+        self.assertEqual(cost, float('inf'))
+        self.assertEqual(path, [])
+
+    def test_path_to_self(self):
+        print("\nTestando: test_path_to_self (A -> A)")
+        src, dst = 'A', 'A'
+        
+        cost, path, streets, weights = dijkstra(self.mock_adj, src, dst)
+        
+        self.assertEqual(cost, 0)
+        self.assertEqual(path, ['A'])
+        self.assertEqual(streets, [])
+        self.assertEqual(weights, [])
+
 
 if __name__ == '__main__':
-    main()
+    print("--- Executando Testes de Unidade para Dijkstra (Versão Bairros) ---")
+    unittest.main()
