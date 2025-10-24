@@ -1,16 +1,9 @@
 import time
 from collections import deque
+from graph import build_directed_graph
+import json
 
 def bfs(adj, start):
-    """
-    Executa a busca em largura (BFS) em um grafo dirigido.
-
-    Retorna:
-      - ordem de visita
-      - níveis (distâncias em camadas)
-      - ciclos detectados
-      - tempo de execução
-    """
     visited = []
     queue = deque([(start, 0)])  
     seen = {start}
@@ -41,3 +34,31 @@ def bfs(adj, start):
         "cycles": cycles,
         "execution_time": exec_time
     }
+
+def main():
+    input_file = '../../data/flight_filtrado.csv'
+    output_file = '../../out/percurso_voo_bfs.json'
+
+    adj = build_directed_graph(input_file)
+    origins = list(adj.keys())[:3]  
+
+    all_results = []
+
+    for origin in origins:
+        print(f"\n🔹 Rodando BFS a partir de '{origin}'...")
+
+        bfs_result = bfs(adj, origin)
+        all_results.append({
+            "origin": origin,
+            "bfs": bfs_result
+        })
+
+        print(f"  BFS: {len(bfs_result['visited_order'])} nós visitados em {bfs_result['execution_time']:.6f}s")
+
+    with open(output_file, "w", encoding="utf-8") as f:
+        json.dump(all_results, f, indent=4, ensure_ascii=False)
+
+    print(f"\n✅ Resultados BFS salvos em '{output_file}'.")
+
+if __name__ == "__main__":
+    main()

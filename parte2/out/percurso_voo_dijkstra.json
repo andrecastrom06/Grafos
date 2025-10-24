@@ -4,6 +4,7 @@
         "origem": "Brazil",
         "destino": "Philippines",
         "custo_total_minutos": 2135,
+        "tempo_execucao_segundos": 0.0,
         "caminho": [
             "Brazil",
             "Germany",
@@ -43,6 +44,7 @@
         "origem": "Brazil",
         "destino": "Taiwan",
         "custo_total_minutos": 2080,
+        "tempo_execucao_segundos": 0.0,
         "caminho": [
             "Brazil",
             "Germany",
@@ -82,6 +84,7 @@
         "origem": "Brazil",
         "destino": "Indonesia",
         "custo_total_minutos": 2210,
+        "tempo_execucao_segundos": 0.0,
         "caminho": [
             "Brazil",
             "Germany",
@@ -119,47 +122,9 @@
     {
         "exemplo_num": 4,
         "origem": "Chile",
-        "destino": "Philippines",
-        "custo_total_minutos": 2355,
-        "caminho": [
-            "Chile",
-            "France",
-            "Denmark",
-            "China",
-            "Philippines"
-        ],
-        "etapas": [
-            {
-                "de": "Chile",
-                "para": "France",
-                "voo": "AF401",
-                "duration_minutes": 1190
-            },
-            {
-                "de": "France",
-                "para": "Denmark",
-                "voo": "SK1560",
-                "duration_minutes": 105
-            },
-            {
-                "de": "Denmark",
-                "para": "China",
-                "voo": "CA878",
-                "duration_minutes": 895
-            },
-            {
-                "de": "China",
-                "para": "Philippines",
-                "voo": "5J309",
-                "duration_minutes": 165
-            }
-        ]
-    },
-    {
-        "exemplo_num": 5,
-        "origem": "Chile",
         "destino": "Malaysia",
         "custo_total_minutos": 2334,
+        "tempo_execucao_segundos": 0.004541158676147461,
         "caminho": [
             "Chile",
             "Brazil",
@@ -191,6 +156,46 @@
                 "para": "Malaysia",
                 "voo": "MH191",
                 "duration_minutes": 475
+            }
+        ]
+    },
+    {
+        "exemplo_num": 5,
+        "origem": "Chile",
+        "destino": "Philippines",
+        "custo_total_minutos": 2355,
+        "tempo_execucao_segundos": 0.006018877029418945,
+        "caminho": [
+            "Chile",
+            "France",
+            "Denmark",
+            "China",
+            "Philippines"
+        ],
+        "etapas": [
+            {
+                "de": "Chile",
+                "para": "France",
+                "voo": "AF401",
+                "duration_minutes": 1190
+            },
+            {
+                "de": "France",
+                "para": "Denmark",
+                "voo": "SK1560",
+                "duration_minutes": 105
+            },
+            {
+                "de": "Denmark",
+                "para": "China",
+                "voo": "CA878",
+                "duration_minutes": 895
+            },
+            {
+                "de": "China",
+                "para": "Philippines",
+                "voo": "5J309",
+                "duration_minutes": 165
             }
         ]
     }

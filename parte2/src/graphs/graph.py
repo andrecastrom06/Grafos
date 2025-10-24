@@ -1,5 +1,3 @@
-# formar o grafo
-
 import pandas as pd
 import sys
 

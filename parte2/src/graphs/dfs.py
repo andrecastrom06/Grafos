@@ -1,15 +1,8 @@
 import time
+import json
+from graph import build_directed_graph
 
 def dfs(adj, start):
-    """
-    Executa a busca em profundidade (DFS) recursiva em um grafo dirigido.
-
-    Retorna:
-      - ordem de visita
-      - níveis (profundidade)
-      - ciclos detectados
-      - tempo de execução
-    """
     visited = []
     levels = {start: 0}
     cycles = []
@@ -35,3 +28,31 @@ def dfs(adj, start):
         "cycles": cycles,
         "execution_time": exec_time
     }
+
+def main():
+    input_file = '../../data/flight_filtrado.csv'
+    output_file = '../../out/percurso_voo_dfs.json'
+
+    adj = build_directed_graph(input_file)
+    origins = list(adj.keys())[:3]  
+
+    all_results = []
+
+    for origin in origins:
+        print(f"\n🔹 Rodando DFS a partir de '{origin}'...")
+
+        dfs_result = dfs(adj, origin)
+        all_results.append({
+            "origin": origin,
+            "dfs": dfs_result
+        })
+
+        print(f"  DFS: {len(dfs_result['visited_order'])} nós visitados em {dfs_result['execution_time']:.6f}s")
+
+    with open(output_file, "w", encoding="utf-8") as f:
+        json.dump(all_results, f, indent=4, ensure_ascii=False)
+
+    print(f"\n✅ Resultados DFS salvos em '{output_file}'.")
+
+if __name__ == "__main__":
+    main()

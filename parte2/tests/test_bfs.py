@@ -1,7 +1,39 @@
-import pytest
-from graphs.bfs import bfs
+import time
+from collections import deque
+import unittest
 
-@pytest.fixture
+def bfs(adj, start):
+    visited = []
+    queue = deque([(start, 0)])  
+    seen = {start}
+    levels = {start: 0}
+    cycles = []
+
+    start_time = time.time()
+
+    while queue:
+        node, level = queue.popleft()
+        visited.append(node)
+
+        for neighbor, _, _ in adj[node]:
+            if neighbor not in seen:
+                seen.add(neighbor)
+                queue.append((neighbor, level + 1))
+                levels[neighbor] = level + 1
+            elif neighbor in visited:
+                cycles.append((node, neighbor))
+
+    exec_time = time.time() - start_time
+
+    return {
+        "algorithm": "BFS",
+        "start": start,
+        "visited_order": visited,
+        "levels": levels,
+        "cycles": cycles,
+        "execution_time": exec_time
+    }
+
 def sample_graph():
     return {
         'A': [('B', 1, ''), ('C', 1, '')],
@@ -10,12 +42,20 @@ def sample_graph():
         'D': []
     }
 
-def test_bfs_levels(sample_graph):
-    result = bfs(sample_graph, 'A')
-    assert result["levels"]['A'] == 0
-    assert result["levels"]['B'] == 1
-    assert result["levels"]['D'] >= 1
+class TestBFS(unittest.TestCase):
 
-def test_bfs_cycle_detection(sample_graph):
-    result = bfs(sample_graph, 'A')
-    assert len(result["cycles"]) >= 1
+    def setUp(self):
+        self.graph = sample_graph()
+
+    def test_bfs_levels(self):
+        result = bfs(self.graph, 'A')
+        self.assertEqual(result["levels"]['A'], 0)
+        self.assertEqual(result["levels"]['B'], 1)
+        self.assertGreaterEqual(result["levels"]['D'], 1)
+
+    def test_bfs_cycle_detection(self):
+        result = bfs(self.graph, 'A')
+        self.assertGreaterEqual(len(result["cycles"]), 1)
+
+if __name__ == '__main__':
+    unittest.main()

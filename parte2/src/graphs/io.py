@@ -1,5 +1,3 @@
-# limpar e tratar dados
-
 import pandas as pd
 import sys
 
