@@ -4,4 +4,6 @@ mvenv
 vnv
 /lib
 lib
+/parte2/src/__pycache__
+/parte2/teste/__pycache__
 /parte2/data/flight.csv
