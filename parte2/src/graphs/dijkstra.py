@@ -1,11 +1,10 @@
 import heapq
 import json
 import time
-import tracemalloc  # <-- ADICIONADO
+import tracemalloc 
 from graph import build_directed_graph
 
 def dijkstra(adj, src, dst):
-    # ... (função dijkstra original sem alterações) ...
     if src not in adj or dst not in adj:
         return float('inf'), [], [], []
 
@@ -86,18 +85,16 @@ def main():
             if src_country == dst_country:
                 continue
             
-            tracemalloc.start()  # <-- ADICIONADO
+            tracemalloc.start() 
             start_time = time.time()  
             cost, path, flights, weights = dijkstra(adj, src_country, dst_country)
             exec_time = time.time() - start_time
-            current, peak = tracemalloc.get_traced_memory()  # <-- ADICIONADO
-            tracemalloc.stop()  # <-- ADICIONADO
-            peak_memory_kb = peak / 1024  # <-- ADICIONADO
+            current, peak = tracemalloc.get_traced_memory()
+            tracemalloc.stop() 
+            peak_memory_kb = peak / 1024  
 
             if cost != float('inf') and len(path) >= min_nos_no_caminho:
-                # <-- LINHA ABAIXO MODIFICADA para incluir memória -->
                 found_examples.append((cost, path, flights, weights, src_country, dst_country, exec_time, peak_memory_kb))
-                # <-- LINHA ABAIXO MODIFICADA para incluir memória no print -->
                 print(f"  ... Exemplo {len(found_examples)} encontrado: '{src_country}' -> '{dst_country}' ({len(path)-1} passos) em {exec_time:.6f}s, pico de memória: {peak_memory_kb:.2f} KB")
                 if len(found_examples) >= max_examples_to_find:
                     break
@@ -106,7 +103,6 @@ def main():
 
     json_results_list = []
     for i, example_data in enumerate(found_examples):
-        # <-- LINHA ABAIXO MODIFICADA para desempacotar memória -->
         cost, path, flights, weights, src_found, dst_found, exec_time, peak_memory_kb = example_data
         
         resultado_json = {
@@ -115,7 +111,7 @@ def main():
             "destino": dst_found,
             "custo_total_minutos": cost,
             "tempo_execucao_segundos": exec_time,
-            "peak_memory_kb": peak_memory_kb,  # <-- ADICIONADO
+            "peak_memory_kb": peak_memory_kb, 
             "caminho": path,
             "etapas": []
         }

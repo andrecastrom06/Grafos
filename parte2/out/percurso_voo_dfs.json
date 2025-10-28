@@ -33436,7 +33436,8 @@
                     "Argentina"
                 ]
             ],
-            "execution_time": 0.02431631088256836
+            "execution_time": 0.021161556243896484,
+            "peak_memory_kb": 523.7265625
         }
     },
     {
@@ -66888,7 +66889,8 @@
                     "Argentina"
                 ]
             ],
-            "execution_time": 0.018019437789916992
+            "execution_time": 0.017542362213134766,
+            "peak_memory_kb": 523.6640625
         }
     },
     {
@@ -99776,7 +99778,8 @@
                     "Australia"
                 ]
             ],
-            "execution_time": 0.009393930435180664
+            "execution_time": 0.016990184783935547,
+            "peak_memory_kb": 515.953125
         }
     }
 ]

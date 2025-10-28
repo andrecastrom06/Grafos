@@ -1,6 +1,6 @@
 import time
 import json
-import tracemalloc  # <-- ADICIONADO
+import tracemalloc
 from graph import build_directed_graph
 
 def dfs(adj, start):
@@ -8,7 +8,7 @@ def dfs(adj, start):
     levels = {start: 0}
     cycles = []
     
-    tracemalloc.start()  # <-- ADICIONADO
+    tracemalloc.start()
     start_time = time.time()
 
     def dfs_visit(node, depth, ancestors):
@@ -23,9 +23,9 @@ def dfs(adj, start):
     dfs_visit(start, 0, [])
     exec_time = time.time() - start_time
     
-    current, peak = tracemalloc.get_traced_memory()  # <-- ADICIONADO
-    tracemalloc.stop()  # <-- ADICIONADO
-    peak_memory_kb = peak / 1024  # <-- ADICIONADO
+    current, peak = tracemalloc.get_traced_memory()  
+    tracemalloc.stop() 
+    peak_memory_kb = peak / 1024  
 
     return {
         "algorithm": "DFS",
@@ -34,7 +34,7 @@ def dfs(adj, start):
         "levels": levels,
         "cycles": cycles,
         "execution_time": exec_time,
-        "peak_memory_kb": peak_memory_kb  # <-- ADICIONADO
+        "peak_memory_kb": peak_memory_kb 
     }
 
 def main():
@@ -55,7 +55,6 @@ def main():
             "dfs": dfs_result
         })
 
-        # <-- LINHA ABAIXO MODIFICADA para incluir memória no print -->
         print(f"  DFS: {len(dfs_result['visited_order'])} nós visitados em {dfs_result['execution_time']:.6f}s, pico de memória: {dfs_result['peak_memory_kb']:.2f} KB")
 
     with open(output_file, "w", encoding="utf-8") as f:
