@@ -1,4 +1,5 @@
 import time
+import tracemalloc  # <-- ADICIONADO
 from collections import deque
 from graph import build_directed_graph
 import json
@@ -10,6 +11,7 @@ def bfs(adj, start):
     levels = {start: 0}
     cycles = []
 
+    tracemalloc.start()  # <-- ADICIONADO
     start_time = time.time()
 
     while queue:
@@ -25,6 +27,10 @@ def bfs(adj, start):
                 cycles.append((node, neighbor))
 
     exec_time = time.time() - start_time
+    
+    current, peak = tracemalloc.get_traced_memory()  # <-- ADICIONADO
+    tracemalloc.stop()  # <-- ADICIONADO
+    peak_memory_kb = peak / 1024  # <-- ADICIONADO
 
     return {
         "algorithm": "BFS",
@@ -32,7 +38,8 @@ def bfs(adj, start):
         "visited_order": visited,
         "levels": levels,
         "cycles": cycles,
-        "execution_time": exec_time
+        "execution_time": exec_time,
+        "peak_memory_kb": peak_memory_kb  # <-- ADICIONADO
     }
 
 def main():
@@ -53,7 +60,8 @@ def main():
             "bfs": bfs_result
         })
 
-        print(f"  BFS: {len(bfs_result['visited_order'])} nós visitados em {bfs_result['execution_time']:.6f}s")
+        # <-- LINHA ABAIXO MODIFICADA para incluir memória no print -->
+        print(f"  BFS: {len(bfs_result['visited_order'])} nós visitados em {bfs_result['execution_time']:.6f}s, pico de memória: {bfs_result['peak_memory_kb']:.2f} KB")
 
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(all_results, f, indent=4, ensure_ascii=False)

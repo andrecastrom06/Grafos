@@ -1,14 +1,15 @@
-# Conteúdo para: src/graphs/bellman_ford.py
 import sys
 import time
+import tracemalloc  # <-- ADICIONADO
 
 def bellman_ford(graph, start_node):
     """
     Executa o algoritmo de Bellman-Ford a partir de um nó de origem.
     
     Retorna:
-        tuple: (dist, pred, has_negative_cycle, execution_time)
+        tuple: (dist, pred, has_negative_cycle, execution_time, peak_memory_kb) # <-- ADICIONADO
     """
+    tracemalloc.start()  # <-- ADICIONADO
     start_time = time.perf_counter()
     
     # 1. Inicialização
@@ -18,7 +19,9 @@ def bellman_ford(graph, start_node):
     # Verifica se o nó de origem realmente existe no grafo
     if start_node not in dist:
         print(f"Erro: Nó de origem '{start_node}' não encontrado no grafo.", file=sys.stderr)
-        return {}, {}, False, 0.0
+        current, peak = tracemalloc.get_traced_memory()  # <-- ADICIONADO
+        tracemalloc.stop()  # <-- ADICIONADO
+        return {}, {}, False, 0.0, peak / 1024  # <-- ADICIONADO
 
     dist[start_node] = 0
     num_nodes = len(graph)
@@ -48,4 +51,8 @@ def bellman_ford(graph, start_node):
     end_time = time.perf_counter()
     execution_time = end_time - start_time
     
-    return dist, pred, has_negative_cycle, execution_time
+    current, peak = tracemalloc.get_traced_memory()  # <-- ADICIONADO
+    tracemalloc.stop()  # <-- ADICIONADO
+    peak_memory_kb = peak / 1024  # <-- ADICIONADO
+    
+    return dist, pred, has_negative_cycle, execution_time, peak_memory_kb  # <-- MODIFICADO
