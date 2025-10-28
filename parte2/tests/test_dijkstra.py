@@ -1,8 +1,5 @@
 import unittest
 import heapq
-import sys, os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
 
 def dijkstra(adj, src, dst):
     if src not in adj or dst not in adj:
