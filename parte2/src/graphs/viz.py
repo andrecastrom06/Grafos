@@ -5,9 +5,6 @@ from pyvis.network import Network
 import tempfile
 import os
 
-# ===================================================
-# 🧠 Função para gerar grafo a partir de JSON genérico
-# ===================================================
 def gerar_grafo(json_path: str, algoritmo: str):
     with open(json_path, "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -15,7 +12,6 @@ def gerar_grafo(json_path: str, algoritmo: str):
     G = nx.DiGraph()
     exemplos = data if isinstance(data, list) else [data]
 
-    # === Dijkstra / Bellman-Ford (têm "etapas") ===
     if "etapas" in exemplos[0]:
         for exemplo in exemplos:
             for etapa in exemplo.get("etapas", []):
@@ -26,7 +22,6 @@ def gerar_grafo(json_path: str, algoritmo: str):
                     weight=etapa["duration_minutes"]
                 )
 
-    # === BFS / DFS (têm "visited_order" e "cycles") ===
     elif algoritmo in ["BFS", "DFS"]:
         for exemplo in exemplos:
             resultado = exemplo.get(algoritmo.lower(), {})
@@ -40,9 +35,6 @@ def gerar_grafo(json_path: str, algoritmo: str):
     else:
         raise ValueError("Formato de JSON desconhecido")
 
-    # ==============================
-    # 🎨 Estilo futurista preto e azul
-    # ==============================
     net = Network(
         height="720px",
         width="100%",
@@ -82,13 +74,9 @@ def gerar_grafo(json_path: str, algoritmo: str):
     return tmp_path
 
 
-# ===================================================
-# 🚀 Interface principal do Streamlit
-# ===================================================
 def main():
     st.set_page_config(page_title="Visualizador de Grafos", layout="wide")
 
-    # CSS futurista
     st.markdown("""
         <style>
         .stApp {
