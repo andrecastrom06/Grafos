@@ -5,9 +5,8 @@ from pyvis.network import Network
 import tempfile
 import os
 
-# --- Funções de Geração do Grafo (Refatoradas) ---
+# --- Funções de Geração do Grafo ---
 
-@st.cache_data  # Cacheia a leitura do JSON e criação do grafo NetworkX
 def create_networkx_graph(json_path: str, algoritmo: str) -> nx.DiGraph:
     """Lê o JSON e cria o objeto DiGraph do NetworkX."""
     with open(json_path, "r", encoding="utf-8") as f:
@@ -16,7 +15,6 @@ def create_networkx_graph(json_path: str, algoritmo: str) -> nx.DiGraph:
     G = nx.DiGraph()
     exemplos = data if isinstance(data, list) else [data]
 
-    # Lógica para grafos de caminhos (Dijkstra, Bellman-Ford)
     if "etapas" in exemplos[0]:
         for exemplo in exemplos:
             for etapa in exemplo.get("etapas", []):
@@ -27,8 +25,6 @@ def create_networkx_graph(json_path: str, algoritmo: str) -> nx.DiGraph:
                     weight=etapa["duration_minutes"],
                     title=f"Voo: {etapa['voo']}\nDuração: {etapa['duration_minutes']} min"
                 )
-
-    # Lógica para grafos de percurso (BFS, DFS)
     elif algoritmo in ["BFS", "DFS"]:
         for exemplo in exemplos:
             resultado = exemplo.get(algoritmo.lower(), {})
@@ -36,59 +32,45 @@ def create_networkx_graph(json_path: str, algoritmo: str) -> nx.DiGraph:
             ciclos = resultado.get("cycles", [])
             for i in range(len(ordem) - 1):
                 G.add_edge(ordem[i], ordem[i+1], label=f"Passo {i+1}", title=f"Passo {i+1}")
-            # Destaca ciclos
             for c in ciclos:
                 G.add_edge(c[0], c[1], label="Ciclo", color="#FF007F", title="Ciclo Detectado")
-
     else:
-        raise ValueError(f"Formato de JSON desconhecido ou não suportado para o algoritmo {algoritmo}.")
+        raise ValueError(f"Formato de JSON desconhecido para o algoritmo {algoritmo}.")
 
     return G
 
 
-# --- CORREÇÃO APLICADA AQUI ---
-@st.cache_data  # Cacheia a renderização do HTML (rápido ao mudar sliders)
-def create_pyvis_html(_G: nx.DiGraph, physics_config: dict, cache_key: str) -> str:
-    """
-    Cria a visualização do PyVis a partir de um grafo NetworkX.
-    _G (com underscore) é ignorado pelo cache do Streamlit.
-    cache_key (string simples) força o cache a recarregar quando o algoritmo muda.
-    """
-    
+def create_pyvis_html(G: nx.DiGraph, physics_config: dict, cache_key: str) -> str:
+    """Cria a visualização do PyVis."""
     net = Network(
         height="750px",
         width="100%",
         bgcolor="#000000",
         font_color="#00BFFF",
         directed=True,
-        notebook=False # Importante para o Streamlit
+        notebook=False
     )
 
-    # Adiciona nós com estilo (usando _G)
-    for node in _G.nodes:
+    for node, data in G.nodes(data=True):
         net.add_node(
             node,
             label=node,
-            color="#0A84FF",
-            size=18,
+            color=data.get("color", "#0A84FF"),
+            size=data.get("size", 18),
             title=f"Aeroporto: {node}",
             font={"size": 14, "color": "#FFFFFF", "face": "Consolas"}
         )
 
-    # Adiciona arestas com estilo (usando _G)
-    for u, v, data_edge in _G.edges(data=True):
+    for u, v, data_edge in G.edges(data=True):
         net.add_edge(
-            u,
-            v,
+            u, v,
             label=data_edge.get("label", ""),
             color=data_edge.get("color", "#33A1FD"),
-            width=2,
+            width=data_edge.get("width", 2),
             arrows="to",
-            title=data_edge.get("title", data_edge.get("label", "")) # Tooltip melhorado
+            title=data_edge.get("title", data_edge.get("label", ""))
         )
 
-    # --- MELHORIA: Opções de física e interação ---
-    # Usa os valores dos sliders passados pelo 'physics_config'
     net.barnes_hut(
         gravity=physics_config["gravity"],
         central_gravity=physics_config["central_gravity"],
@@ -97,117 +79,154 @@ def create_pyvis_html(_G: nx.DiGraph, physics_config: dict, cache_key: str) -> s
         damping=0.09,
         overlap=0
     )
-    
-    # --- MELHORIA: Adiciona botões de controle nativos do PyVis ---
+
     net.show_buttons(filter_=['physics'])
-    
-    # Salva em um arquivo temporário
+
     tmp_path = tempfile.NamedTemporaryFile(delete=False, suffix=".html").name
     net.save_graph(tmp_path)
     return tmp_path
 
-# --- Interface do Streamlit (main) ---
+
+# --- Interface do Streamlit ---
 
 def main():
-    st.set_page_config(page_title="Visualizador de Grafos", layout="wide", initial_sidebar_state="expanded")
+    st.set_page_config(page_title="Visualizador de Grafos", layout="wide")
 
-    # --- MELHORIA: CSS aprimorado (incluindo a sidebar) ---
     st.markdown("""
         <style>
-        /* Fundo principal */
         .stApp {
             background: radial-gradient(circle at 10% 20%, #000000 0%, #001A33 100%);
             color: #00BFFF;
         }
-        
-        /* Títulos */
         h1, h2, h3 {
             color: #33A1FD !important;
             text-shadow: 0 0 12px #007BFF;
             font-family: 'Consolas', 'Courier New', monospace;
         }
-        
-        /* Sidebar */
         .stSidebar {
-            background-color: rgba(0, 10, 20, 0.8) !important;
-            backdrop-filter: blur(5px);
+            background-color: rgba(0, 10, 20, 0.85) !important;
+            backdrop-filter: blur(6px);
         }
-        
-        /* Textos e widgets */
-        .stSelectbox label, .stInfo, .stSlider label, .stMetric label, .stMetric value {
-            color: #00BFFF !important;
-            font-family: 'Consolas', 'Courier New', monospace;
+        /* Destaque de seleção de aeroportos */
+        .highlight-box {
+            border: 1px solid #00BFFF;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 20px;
+            background: rgba(0, 20, 40, 0.7);
+            box-shadow: 0 0 15px #007BFF66;
         }
-        .stMetric value {
-            color: #FFFFFF !important;
+        .stSelectbox label {
+            color: #33CCFF !important;
+            font-weight: bold;
+            text-shadow: 0 0 6px #0099FF;
         }
         </style>
     """, unsafe_allow_html=True)
 
-    # --- Conteúdo Principal ---
     st.title("💠 Visualizador Futurista de Grafos")
-    st.write("Explore dinamicamente os resultados dos algoritmos de grafos.")
+    st.write("Explore dinamicamente os resultados dos algoritmos de grafos com estilo neon.")
 
-    # --- MELHORIA: Controles na Sidebar ---
     st.sidebar.header("🚀 Controles")
-
     algoritmos = {
         "BFS": "../out/percurso_voo_bfs.json",
         "DFS": "../out/percurso_voo_dfs.json",
         "Dijkstra": "../out/percurso_voo_dijkstra.json",
         "Bellman-Ford": "../out/percurso_voo_bellman_ford.json"
     }
-    
+
     algoritmo = st.sidebar.selectbox("Selecione o algoritmo:", list(algoritmos.keys()))
     json_path = algoritmos[algoritmo]
 
     st.sidebar.markdown("---")
-    st.sidebar.subheader("Ajustes de Física (Barnes-Hut)")
+    st.sidebar.subheader("⚙️ Ajustes de Física (Barnes-Hut)")
 
-    # --- MELHORIA: Sliders para controle da física ---
     physics_config = {
         "gravity": st.sidebar.slider("Gravidade (Atração)", -50000, 0, -25000, step=1000),
         "central_gravity": st.sidebar.slider("Gravidade Central", 0.0, 1.0, 0.3, step=0.05),
-        "spring_length": st.sidebar.slider("Comprimento da Mola", 50, 500, 120, step=10),
+        "spring_length": st.sidebar.slider("Comprimento da Mola", 50, 500, 140, step=10),
         "spring_strength": st.sidebar.slider("Força da Mola", 0.01, 0.2, 0.05, step=0.01)
     }
-    
+
     st.sidebar.markdown("---")
 
-    # --- Lógica de Renderização ---
-    
+    # Seleção de origem/destino
+    origem = destino = None
+    if algoritmo in ["Dijkstra", "Bellman-Ford"]:
+        st.sidebar.markdown("<div class='highlight-box'><h3>✈️ Seleção de Aeroportos</h3>", unsafe_allow_html=True)
+
+        with open(json_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        nodes = set()
+        for exemplo in data if isinstance(data, list) else [data]:
+            for etapa in exemplo.get("etapas", []):
+                nodes.add(etapa["de"])
+                nodes.add(etapa["para"])
+        nodes = sorted(list(nodes))
+
+        origem = st.sidebar.selectbox("Aeroporto de Origem:", nodes, key="origem_select")
+        destino = st.sidebar.selectbox("Aeroporto de Destino:", nodes, key="destino_select")
+
+        st.sidebar.markdown("</div>", unsafe_allow_html=True)
+
+    # Renderização do grafo
     if not os.path.exists(json_path):
         st.error(f"❌ Arquivo não encontrado: {os.path.abspath(json_path)}")
-        st.info("Verifique se o caminho do JSON está correto e se o arquivo existe.")
         st.stop()
 
-    st.info(f"Renderizando grafo para **{algoritmo}**... Use os controles na sidebar para ajustar a física.")
+    G = create_networkx_graph(json_path, algoritmo)
 
-    try:
-        # 1. Cria o grafo NetworkX (cacheado)
-        G = create_networkx_graph(json_path, algoritmo)
+  # 🚀 Cálculo do caminho mínimo
+    if algoritmo in ["Dijkstra", "Bellman-Ford"] and origem and destino:
+        # Verifica se origem e destino são iguais
+        if origem == destino:
+            st.warning("⚠️ O aeroporto de origem e destino são iguais. Escolha dois diferentes.")
+        else:
+            try:
+                if algoritmo == "Dijkstra":
+                    path = nx.dijkstra_path(G, origem, destino, weight="weight")
+                    length = nx.dijkstra_path_length(G, origem, destino, weight="weight")
+                else:
+                    path = nx.bellman_ford_path(G, origem, destino, weight="weight")
+                    length = nx.bellman_ford_path_length(G, origem, destino, weight="weight")
 
-        # --- MELHORIA: Exibe Métricas do Grafo ---
-        st.sidebar.subheader("📊 Métricas do Grafo")
-        col1, col2 = st.sidebar.columns(2)
-        col1.metric("Nós (Aeroportos)", G.number_of_nodes())
-        col2.metric("Arestas (Voos)", G.number_of_edges())
-        
-        # 2. Cria o HTML do PyVis (cacheado)
-        # --- CORREÇÃO APLICADA AQUI ---
-        # Passa 'algoritmo' como a 'cache_key' para o cache funcionar corretamente
-        graph_path = create_pyvis_html(G, physics_config, algoritmo)
-        
-        # 3. Lê o HTML e exibe
-        with open(graph_path, "r", encoding="utf-8") as f:
-            html = f.read()
+                st.success(f"✈️ Caminho mínimo de **{origem}** até **{destino}** ({algoritmo}):")
+                st.info(" → ".join(path))
+                st.metric("Duração total (min)", f"{length:.1f}")
 
-        st.components.v1.html(html, height=750, scrolling=False)
+                # Destacar o caminho mínimo
+                edges_in_path = list(zip(path[:-1], path[1:]))
+                for (u, v) in G.edges():
+                    if (u, v) in edges_in_path:
+                        G[u][v]["color"] = "#FFD700"  # dourado
+                        G[u][v]["width"] = 4
+                    else:
+                        G[u][v]["color"] = "#444"
+                        G[u][v]["width"] = 1
 
-    except Exception as e:
-        st.error(f"Erro ao gerar o grafo: {e}")
-        st.exception(e) # Mostra o stacktrace para debug
-        st.stop()
+                # Destaque de nós origem/destino
+                G.nodes[origem]["color"] = "#00FF88"
+                G.nodes[origem]["size"] = 25
+                G.nodes[destino]["color"] = "#FF3366"
+                G.nodes[destino]["size"] = 25
+
+            except nx.NetworkXNoPath:
+                st.error(f"❌ Nenhum caminho encontrado entre {origem} e {destino}.")
+
+    # Métricas
+    st.sidebar.subheader("📊 Métricas do Grafo")
+    col1, col2 = st.sidebar.columns(2)
+    col1.metric("Nós (Aeroportos)", G.number_of_nodes())
+    col2.metric("Arestas (Voos)", G.number_of_edges())
+
+    # Criação do HTML (sem cache para atualizar automaticamente)
+    graph_path = create_pyvis_html(G, physics_config, f"{algoritmo}-{origem}-{destino}")
+
+    with open(graph_path, "r", encoding="utf-8") as f:
+        html = f.read()
+
+    st.components.v1.html(html, height=750, scrolling=False)
 
     st.markdown("---")
     st.caption("🛰️ Projeto de Grafos — Visual Futurista Preto e Azul | PyVis + Streamlit")
