@@ -61,31 +61,47 @@ st.markdown("""
 # PRIMEIRO: Carregar os dados antes de usar no sidebar
 @st.cache_data
 def load_data():
+    import unicodedata, re
+
+    def normalizar_nome(nome):
+        if pd.isna(nome):
+            return ''
+        nome = str(nome).strip().lower()
+        nome = re.sub(r'\s+', ' ', nome)
+        nome = unicodedata.normalize('NFKD', nome).encode('ASCII', 'ignore').decode('utf-8')
+        return nome.title()
+
+    # Carrega os dados
     df_adj = pd.read_csv('../data/adjacencias_bairros.csv')
-    df_info = pd.read_csv('../data/bairros_unique.csv')  
-    
-    # Criar dicionário de adjacências
+    df_info = pd.read_csv('../data/bairros_unique.csv')
+
+    # Normaliza nomes nos dois datasets
+    for col in ['bairro_origem', 'bairro_destino']:
+        df_adj[col] = df_adj[col].apply(normalizar_nome)
+    df_info['bairro'] = df_info['bairro'].apply(normalizar_nome)
+
+    # Cria o dicionário de adjacências
     adj = {}
     for _, row in df_adj.iterrows():
-        u = row['bairro_origem'].strip()
-        v = row['bairro_destino'].strip()
+        u = normalizar_nome(row['bairro_origem'])
+        v = normalizar_nome(row['bairro_destino'])
         adj.setdefault(u, set()).add(v)
         adj.setdefault(v, set()).add(u)
-    
-    # Calcular densidade
+
+    # Calcula densidade (ego)
     densidade = {}
     for bairro, vizinhos in adj.items():
         k = len(vizinhos)
         if k <= 1:
             densidade[bairro] = 0
         else:
-            links = sum(1 for u in vizinhos for v in vizinhos if u != v and v in adj[u]) / 2
-            densidade[bairro] = links / (k*(k-1)/2)
-    
-    # Carregar percurso
+            links = sum(1 for u in vizinhos for v in vizinhos if u != v and v in adj.get(u, [])) / 2
+            densidade[bairro] = links / (k * (k - 1) / 2)
+
+    # Carrega percurso (mantém original)
     with open('../out/percurso_nova_descoberta_setubal.json', encoding='utf-8') as f:
         percurso = json.load(f)
-    
+
     return df_adj, df_info, adj, densidade, percurso
 
 # Carregar dados
@@ -181,7 +197,7 @@ with col2:
             destino = caminho[i+1]
             rua = ruas[i] if ruas and i < len(ruas) else ""
             peso = pesos[i] if pesos and i < len(pesos) else ""
-            label = f"{rua} ({peso}km)" if peso else rua
+            label = f"{rua} - {peso}" if peso else rua
             net.add_edge(origem, destino, label=label, color=cor_arestas, width=espessura)
 
         html = net.generate_html()

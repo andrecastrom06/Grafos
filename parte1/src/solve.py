@@ -1,7 +1,15 @@
-# construção dos json /out
-
 import pandas as pd
 import json
+import re
+import unicodedata
+
+def normalizar_nome(nome):
+    if pd.isna(nome):
+        return ''
+    nome = str(nome).strip().lower()
+    nome = re.sub(r'\s+', ' ', nome) 
+    nome = unicodedata.normalize('NFKD', nome).encode('ASCII', 'ignore').decode('utf-8')  
+    return nome.title()  
 
 class Grafo:
     def __init__(self):
@@ -12,8 +20,10 @@ class Grafo:
             self.adj[u] = []
         if v not in self.adj:
             self.adj[v] = []
-        self.adj[u].append((v, logradouro))
-        self.adj[v].append((u, logradouro))
+        if v not in [x[0] for x in self.adj[u]]: 
+            self.adj[u].append((v, logradouro))
+        if u not in [x[0] for x in self.adj[v]]:  
+            self.adj[v].append((u, logradouro))
 
     def vizinhos(self, u):
         return [v for v, _ in self.adj.get(u, [])]
@@ -36,10 +46,6 @@ class Grafo:
     
     def subgrafo(self, vertices):
         sg = Grafo()
-        for v in vertices:
-            if v not in sg.adj:
-                sg.adj[v] = []
-                
         vertices_set = set(vertices)
         for u in vertices_set:
             if u in self.adj:
@@ -51,15 +57,20 @@ class Grafo:
 df_adjacencias = pd.read_csv("../data/adjacencias_bairros.csv")
 df_microrregiao = pd.read_csv("../data/bairros_unique.csv")
 
+for col in ['bairro_origem', 'bairro_destino']:
+    df_adjacencias[col] = df_adjacencias[col].apply(normalizar_nome)
+
+df_microrregiao['bairro'] = df_microrregiao['bairro'].apply(normalizar_nome)
+
 grafo = Grafo()
 
 for _, row in df_adjacencias.iterrows():
-    grafo.adicionar_aresta(row["bairro_origem"], row["bairro_destino"], row["logradouro"])
+    grafo.adicionar_aresta(row["bairro_origem"], row["bairro_destino"], row.get("logradouro"))
 
 for bairro in df_microrregiao['bairro']:
     if bairro not in grafo.adj:
         grafo.adj[bairro] = []
-        
+
 dados_globais = {
     "ordem": grafo.ordem(),
     "tamanho": grafo.tamanho(),
@@ -97,8 +108,7 @@ for bairro in sorted(grafo.adj.keys()):
 df_ego = pd.DataFrame(resultados_ego)
 df_ego.to_csv("../out/ego_bairro.csv", index=False, encoding='utf-8')
 
-graus_data = [{"bairro": bairro, "grau": grafo.grau(bairro)} for bairro in sorted(grafo.adj.keys())]
-df_graus = pd.DataFrame(graus_data).sort_values(by='grau', ascending=False)
+df_graus = df_ego[['bairro', 'grau']].sort_values(by='grau', ascending=False)
 df_graus.to_csv('../out/graus.csv', index=False, encoding='utf-8')
 
 idx_mais_denso = df_ego['densidade_ego'].idxmax()

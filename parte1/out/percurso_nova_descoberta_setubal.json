@@ -1,18 +1,33 @@
 {
   "bairro_X": "Nova Descoberta",
   "bairro_Y": "Boa Viagem",
-  "custo": 4.0,
+  "custo": 15.1,
   "caminho": [
     "Nova Descoberta",
-    "Brejo da Guabiraba",
+    "Vasco Da Gama",
+    "Morro Da Conceicao",
+    "Alto Jose Do Pinho",
+    "Bomba Do Hemeterio",
+    "Arruda",
+    "Peixinhos",
     "Boa Viagem"
   ],
   "ruas": [
-    "av.brejo+av.nova_descoberta",
-    "2av.norte_miguel_arraes_de_alencar+av.dois_irmaos"
+    "Rua Arapiraca",
+    "Rua Mocidade",
+    "Rua Alto Alegre",
+    "Rua das Hortas",
+    "Rua São Bento",
+    "Rua Poeta Jayme Griz",
+    "Rua Limite de Município"
   ],
   "pesos": [
-    2.0,
-    2.0
+    2.13,
+    2.12,
+    2.15,
+    2.14,
+    2.13,
+    2.2,
+    2.23
   ]
 }

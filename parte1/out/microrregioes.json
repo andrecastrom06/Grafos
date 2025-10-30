@@ -2,37 +2,37 @@
   {
     "microrregiao": 1,
     "ordem": 11,
-    "tamanho": 26,
-    "densidade": 0.4727
+    "tamanho": 17,
+    "densidade": 0.3091
   },
   {
     "microrregiao": 2,
     "ordem": 18,
-    "tamanho": 73,
-    "densidade": 0.4771
+    "tamanho": 35,
+    "densidade": 0.2288
   },
   {
     "microrregiao": 3,
     "ordem": 29,
-    "tamanho": 161,
-    "densidade": 0.3966
+    "tamanho": 53,
+    "densidade": 0.1305
   },
   {
     "microrregiao": 4,
     "ordem": 12,
-    "tamanho": 28,
-    "densidade": 0.4242
+    "tamanho": 21,
+    "densidade": 0.3182
   },
   {
     "microrregiao": 5,
     "ordem": 16,
-    "tamanho": 40,
-    "densidade": 0.3333
+    "tamanho": 29,
+    "densidade": 0.2417
   },
   {
     "microrregiao": 6,
     "ordem": 8,
-    "tamanho": 14,
-    "densidade": 0.5
+    "tamanho": 12,
+    "densidade": 0.4286
   }
 ]

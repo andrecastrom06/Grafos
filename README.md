@@ -19,3 +19,11 @@ Entre na pasta Parte1 ou Parte2, rode os códigos python com o comando:
 
 # DataBases parte 2
   - [flight](https://drive.google.com/file/d/12aa43trn9J-EoHoBEkpdPzH3Sfpb9p54/view?usp=sharing)
+
+# Parte 1
+ Rode na ordem abaixo para melhor resultado
+ - io.py
+ - algorithms.py
+ - solve.py
+ - viz.py
+ - test_dijkstra.py
