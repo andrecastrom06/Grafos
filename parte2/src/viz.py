@@ -25,15 +25,35 @@ def create_networkx_graph(json_path: str, algoritmo: str) -> nx.DiGraph:
                     weight=etapa["duration_minutes"],
                     title=f"Voo: {etapa['voo']}\nDuração: {etapa['duration_minutes']} min"
                 )
+
     elif algoritmo in ["BFS", "DFS"]:
         for exemplo in exemplos:
             resultado = exemplo.get(algoritmo.lower(), {})
             ordem = resultado.get("visited_order", [])
             ciclos = resultado.get("cycles", [])
+            etapas = exemplo.get("etapas", [])
+
+            # Dicionário para mapear voos (u,v) -> nome
+            voo_map = {(e["de"], e["para"]): e.get("voo", "—") for e in etapas}
+
+            # Arestas do percurso
             for i in range(len(ordem) - 1):
-                G.add_edge(ordem[i], ordem[i+1], label=f"Passo {i+1}", title=f"Passo {i+1}")
+                u, v = ordem[i], ordem[i + 1]
+                nome_voo = voo_map.get((u, v), "—")
+                G.add_edge(
+                    u, v,
+                    label=f"{nome_voo} (Passo {i+1})",
+                    title=f"Voo: {nome_voo} | Passo {i+1}"
+                )
+
+            # Arestas de ciclo (podem ser ocultadas)
             for c in ciclos:
-                G.add_edge(c[0], c[1], label="Ciclo", color="#FF007F", title="Ciclo Detectado")
+                G.add_edge(
+                    c[0], c[1],
+                    label="Ciclo",
+                    color="#FF007F",
+                    title="Ciclo Detectado"
+                )
     else:
         raise ValueError(f"Formato de JSON desconhecido para o algoritmo {algoritmo}.")
 
@@ -71,6 +91,7 @@ def create_pyvis_html(G: nx.DiGraph, physics_config: dict, cache_key: str) -> st
             title=data_edge.get("title", data_edge.get("label", ""))
         )
 
+    # Física (valores fixos suaves)
     net.barnes_hut(
         gravity=physics_config["gravity"],
         central_gravity=physics_config["central_gravity"],
@@ -79,8 +100,6 @@ def create_pyvis_html(G: nx.DiGraph, physics_config: dict, cache_key: str) -> st
         damping=0.09,
         overlap=0
     )
-
-    net.show_buttons(filter_=['physics'])
 
     tmp_path = tempfile.NamedTemporaryFile(delete=False, suffix=".html").name
     net.save_graph(tmp_path)
@@ -107,7 +126,6 @@ def main():
             background-color: rgba(0, 10, 20, 0.85) !important;
             backdrop-filter: blur(6px);
         }
-        /* Destaque de seleção de aeroportos */
         .highlight-box {
             border: 1px solid #00BFFF;
             border-radius: 10px;
@@ -125,9 +143,10 @@ def main():
     """, unsafe_allow_html=True)
 
     st.title("💠 Visualizador Futurista de Grafos")
-    st.write("Explore dinamicamente os resultados dos algoritmos de grafos com estilo neon.")
+    st.write("Explore dinamicamente os resultados dos algoritmos de grafos com estilo neon ⚡")
 
-    st.sidebar.header("🚀 Controles")
+    # Seleção central de algoritmo
+    st.markdown("### ⚙️ Escolha o algoritmo para visualizar")
     algoritmos = {
         "BFS": "../out/percurso_voo_bfs.json",
         "DFS": "../out/percurso_voo_dfs.json",
@@ -135,22 +154,22 @@ def main():
         "Bellman-Ford": "../out/percurso_voo_bellman_ford.json"
     }
 
-    algoritmo = st.sidebar.selectbox("Selecione o algoritmo:", list(algoritmos.keys()))
+    algoritmo = st.selectbox("Selecione o algoritmo:", [""] + list(algoritmos.keys()), index=0)
+
+    if algoritmo == "":
+        st.info("👈 Escolha um algoritmo acima para iniciar a visualização.")
+        st.stop()
+
     json_path = algoritmos[algoritmo]
 
-    st.sidebar.markdown("---")
-    st.sidebar.subheader("⚙️ Ajustes de Física (Barnes-Hut)")
-
     physics_config = {
-        "gravity": st.sidebar.slider("Gravidade (Atração)", -50000, 0, -25000, step=1000),
-        "central_gravity": st.sidebar.slider("Gravidade Central", 0.0, 1.0, 0.3, step=0.05),
-        "spring_length": st.sidebar.slider("Comprimento da Mola", 50, 500, 140, step=10),
-        "spring_strength": st.sidebar.slider("Força da Mola", 0.01, 0.2, 0.05, step=0.01)
+        "gravity": -25000,
+        "central_gravity": 0.3,
+        "spring_length": 140,
+        "spring_strength": 0.05
     }
 
-    st.sidebar.markdown("---")
-
-    # Seleção de origem/destino
+    # Seleção de origem/destino para algoritmos de caminho mínimo
     origem = destino = None
     if algoritmo in ["Dijkstra", "Bellman-Ford"]:
         st.sidebar.markdown("<div class='highlight-box'><h3>✈️ Seleção de Aeroportos</h3>", unsafe_allow_html=True)
@@ -170,16 +189,24 @@ def main():
 
         st.sidebar.markdown("</div>", unsafe_allow_html=True)
 
-    # Renderização do grafo
+    # Verifica existência do JSON
     if not os.path.exists(json_path):
         st.error(f"❌ Arquivo não encontrado: {os.path.abspath(json_path)}")
         st.stop()
 
+    # Cria grafo
     G = create_networkx_graph(json_path, algoritmo)
 
-  # 🚀 Cálculo do caminho mínimo
+    # Opção para ocultar ciclos
+    if algoritmo in ["BFS", "DFS"]:
+        mostrar_ciclos = st.checkbox("Mostrar arestas de ciclos", value=True)
+        if not mostrar_ciclos:
+            edges_to_remove = [(u, v) for u, v, data in G.edges(data=True)
+                               if "Ciclo" in data.get("label", "")]
+            G.remove_edges_from(edges_to_remove)
+
+    # Caminho mínimo (Dijkstra / Bellman-Ford)
     if algoritmo in ["Dijkstra", "Bellman-Ford"] and origem and destino:
-        # Verifica se origem e destino são iguais
         if origem == destino:
             st.warning("⚠️ O aeroporto de origem e destino são iguais. Escolha dois diferentes.")
         else:
@@ -195,17 +222,15 @@ def main():
                 st.info(" → ".join(path))
                 st.metric("Duração total (min)", f"{length:.1f}")
 
-                # Destacar o caminho mínimo
                 edges_in_path = list(zip(path[:-1], path[1:]))
                 for (u, v) in G.edges():
                     if (u, v) in edges_in_path:
-                        G[u][v]["color"] = "#FFD700"  # dourado
+                        G[u][v]["color"] = "#FFD700"
                         G[u][v]["width"] = 4
                     else:
                         G[u][v]["color"] = "#444"
                         G[u][v]["width"] = 1
 
-                # Destaque de nós origem/destino
                 G.nodes[origem]["color"] = "#00FF88"
                 G.nodes[origem]["size"] = 25
                 G.nodes[destino]["color"] = "#FF3366"
@@ -214,13 +239,13 @@ def main():
             except nx.NetworkXNoPath:
                 st.error(f"❌ Nenhum caminho encontrado entre {origem} e {destino}.")
 
-    # Métricas
+    # Métricas do grafo
     st.sidebar.subheader("📊 Métricas do Grafo")
     col1, col2 = st.sidebar.columns(2)
     col1.metric("Nós (Aeroportos)", G.number_of_nodes())
     col2.metric("Arestas (Voos)", G.number_of_edges())
 
-    # Criação do HTML (sem cache para atualizar automaticamente)
+    # Renderização do grafo
     graph_path = create_pyvis_html(G, physics_config, f"{algoritmo}-{origem}-{destino}")
 
     with open(graph_path, "r", encoding="utf-8") as f:
