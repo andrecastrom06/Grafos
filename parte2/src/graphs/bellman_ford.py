@@ -1,7 +1,7 @@
 import json
 import time
 import tracemalloc
-from graph import build_directed_graph
+from graph import build_directed_graph 
 
 def bellman_ford(graph, start):
     tracemalloc.start()
@@ -22,9 +22,12 @@ def bellman_ford(graph, start):
 
     has_neg = False
     for u in graph:
+        if dist[u] == float('inf'):
+            continue
         for v, w, _ in graph[u]:
             if dist[u] + w < dist[v]:
                 has_neg = True
+                print(f"Ciclo negativo detectado: {u} -> {v}") # Log adicional
                 break
         if has_neg:
             break
@@ -46,8 +49,15 @@ def reconstruir_caminho(pred, origem, destino):
         flights.insert(0, log)
         weights.insert(0, w)
         cur = prev_node
+    
+    # Adiciona a origem apenas se o caminho foi reconstruído com sucesso
     if cur == origem:
         path.insert(0, origem)
+    
+    # Se o caminho não começa com a origem, algo deu errado (ex: destino inalcançável)
+    if not path or path[0] != origem:
+        return [], [], [] # Retorna caminho vazio
+        
     return path, flights, weights
 
 
@@ -57,8 +67,12 @@ def main():
     csv_file_path = '../../data/flight_filtrado.csv'
     output_json_file = '../../out/percurso_voo_bellman_ford.json'
 
-    max_examples_to_find = 5
-    target_origin_countries = ['Brazil', 'Chile']
+    # --- MODIFICAÇÃO ---
+    # Variáveis removidas:
+    # max_examples_to_find = 5 
+    # target_origin_countries = ['Brazil', 'Chile']
+    
+    # Mantemos este filtro
     min_nos_no_caminho = 5
 
     graph = build_directed_graph(csv_file_path)
@@ -66,42 +80,61 @@ def main():
         print("ERRO: O grafo está vazio. Verifique 'flight_filtrado.csv'.")
         return
 
-    valid_origins = [c for c in target_origin_countries if c in graph]
-    if not valid_origins:
-        print(f"ERRO: Nenhum dos países de origem alvo {target_origin_countries} foi encontrado no grafo.")
-        return
+    # --- MODIFICAÇÃO ---
+    # A verificação de 'valid_origins' não é mais necessária
 
     found_examples = []
-    all_countries = list(graph.keys())
+    all_countries = list(graph.keys()) # Isso já pega todos os países do grafo
+    total_countries = len(all_countries)
 
-    for src_country in all_countries:
-        if src_country not in target_origin_countries:
-            continue
-        dist, pred, has_neg, _, _ = bellman_ford(graph, src_country)
+    print(f"Iniciando cálculo de Bellman-Ford para {total_countries} países de origem...")
+
+    # --- MODIFICAÇÃO ---
+    # Loop principal agora itera por TODOS os países em 'all_countries'
+    for i, src_country in enumerate(all_countries):
+        
+        # Adiciona um log de progresso, pois isso pode demorar
+        print(f"  Calculando caminhos a partir de: {src_country} ({i+1}/{total_countries})")
+
+        # --- CORREÇÃO ---
+        # Capturamos o tempo e a memória da execução principal do Bellman-Ford
+        dist, pred, has_neg, bf_exec_time, bf_peak_memory = bellman_ford(graph, src_country)
+        
         if has_neg:
-            print(f"  ALERTA: Ciclo negativo detectado a partir de {src_country}")
+            print(f"    ALERTA: Ciclo negativo detectado em caminhos a partir de {src_country}")
+            # Você pode decidir pular os destinos se houver um ciclo negativo
+            # continue 
+
+        # Loop interno para verificar todos os destinos
         for dst_country in all_countries:
             if src_country == dst_country:
                 continue
+                
+            # Verifica se o destino é alcançável
             if dist[dst_country] == float('inf'):
                 continue
+                
             path, flights, weights = reconstruir_caminho(pred, src_country, dst_country)
-            if len(path) >= min_nos_no_caminho:
-                dist_val, _, has_neg, exec_time, peak_memory_kb = dist, pred, has_neg, _, _
-                tracemalloc.start()
-                start_time = time.time()
+            
+            # Se o caminho for válido e atender ao critério de nós
+            if path and len(path) >= min_nos_no_caminho:
                 dist_val = dist[dst_country]
-                exec_time = time.time() - start_time
-                current, peak = tracemalloc.get_traced_memory()
-                tracemalloc.stop()
-                peak_memory_kb = peak / 1024
-                found_examples.append((dist_val, path, flights, weights, src_country, dst_country, exec_time, peak_memory_kb))
-                print(f"  ... Exemplo {len(found_examples)} encontrado: '{src_country}' -> '{dst_country}' ({len(path)-1} passos) em {exec_time:.6f}s, pico de memória: {peak_memory_kb:.2f} KB")
-                if len(found_examples) >= max_examples_to_find:
-                    break
-        if len(found_examples) >= max_examples_to_find:
-            break
+                
+                # --- CORREÇÃO ---
+                # Usamos os valores bf_exec_time e bf_peak_memory da execução principal
+                # Removemos o tracemalloc e time() de dentro deste loop
+                found_examples.append((
+                    dist_val, path, flights, weights, 
+                    src_country, dst_country, 
+                    bf_exec_time, bf_peak_memory
+                ))
+        
+        # --- MODIFICAÇÃO ---
+        # Os 'breaks' baseados em 'max_examples_to_find' foram removidos
 
+    print(f"\nCálculo de caminhos concluído. Total de {len(found_examples)} caminhos encontrados.")
+
+    # O restante do código para salvar o JSON permanece o mesmo
     json_results_list = []
     for i, ex in enumerate(found_examples):
         cost, path, flights, weights, src_found, dst_found, exec_time, peak_memory_kb = ex
