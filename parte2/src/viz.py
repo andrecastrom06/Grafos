@@ -5,7 +5,6 @@ from pyvis.network import Network
 import tempfile
 import os
 
-# --- Funções de Geração do Grafo ---
 
 def create_networkx_graph(data: list, algoritmo: str) -> nx.DiGraph:
     """
@@ -18,8 +17,6 @@ def create_networkx_graph(data: list, algoritmo: str) -> nx.DiGraph:
     if not exemplos:
         return G
 
-    # Verifica a estrutura do *primeiro* exemplo para decidir a lógica
-    # Estrutura de Bellman-Ford / Dijkstra
     if "etapas" in exemplos[0] and "origem" in exemplos[0]:
         for exemplo in exemplos:
             for etapa in exemplo.get("etapas", []):
@@ -31,7 +28,6 @@ def create_networkx_graph(data: list, algoritmo: str) -> nx.DiGraph:
                     title=f"Voo: {etapa['voo']}\nDuração: {etapa['duration_minutes']} min"
                 )
 
-    # Estrutura de BFS / DFS
     elif algoritmo in ["BFS", "DFS"]:
         for exemplo in exemplos:
             resultado = exemplo.get(algoritmo.lower(), {})
@@ -39,10 +35,8 @@ def create_networkx_graph(data: list, algoritmo: str) -> nx.DiGraph:
             ciclos = resultado.get("cycles", [])
             etapas = exemplo.get("etapas", [])
 
-            # Dicionário para mapear voos (u,v) -> nome
             voo_map = {(e["de"], e["para"]): e.get("voo", "—") for e in etapas}
 
-            # Arestas do percurso
             for i in range(len(ordem) - 1):
                 u, v = ordem[i], ordem[i + 1]
                 nome_voo = voo_map.get((u, v), "—")
@@ -52,7 +46,6 @@ def create_networkx_graph(data: list, algoritmo: str) -> nx.DiGraph:
                     title=f"Voo: {nome_voo} | Passo {i+1}"
                 )
 
-            # Arestas de ciclo (podem ser ocultadas)
             for c in ciclos:
                 G.add_edge(
                     c[0], c[1],
@@ -97,7 +90,6 @@ def create_pyvis_html(G: nx.DiGraph, physics_config: dict, cache_key: str) -> st
             title=data_edge.get("title", data_edge.get("label", ""))
         )
 
-    # Física (valores fixos suaves)
     net.barnes_hut(
         gravity=physics_config["gravity"],
         central_gravity=physics_config["central_gravity"],
@@ -112,7 +104,6 @@ def create_pyvis_html(G: nx.DiGraph, physics_config: dict, cache_key: str) -> st
     return tmp_path
 
 
-# --- Interface do Streamlit ---
 
 def main():
     st.set_page_config(page_title="Visualizador de Grafos", layout="wide")
@@ -148,16 +139,19 @@ def main():
         </style>
     """, unsafe_allow_html=True)
 
-    st.title("💠 Visualizador Futurista de Grafos")
+    st.title("Visualizador dos vôos")
     st.write("Explore dinamicamente os resultados dos algoritmos de grafos com estilo neon ⚡")
 
     st.markdown("### ⚙️ Escolha o algoritmo para visualizar")
+    
     algoritmos = {
         "BFS": "../out/percurso_voo_bfs.json",
         "DFS": "../out/percurso_voo_dfs.json",
-        "Dijkstra": "../out/percurso_voo_dijkstra.json",
+        "Dijkstra": "../out/percurso_voo_dijkstra_todos_para_todos.json", # CORRIGIDO
         "Bellman-Ford": "../out/percurso_voo_bellman_ford.json"
     }
+    
+
 
     algoritmo = st.selectbox("Selecione o algoritmo:", [""] + list(algoritmos.keys()), index=0)
 
@@ -168,8 +162,11 @@ def main():
     json_path = algoritmos[algoritmo]
     
     if not os.path.exists(json_path):
-        st.error(f"❌ Arquivo não encontrado: {os.path.abspath(json_path)}")
+        st.error(f"❌ Arquivo não encontrado: {json_path}")
+        st.write(f"Caminho absoluto verificado: {os.path.abspath(json_path)}")
+        st.error(f"Verifique se o arquivo '{algoritmos[algoritmo]}' existe na pasta 'out'.")
         st.stop()
+
 
     physics_config = {
         "gravity": -25000,
@@ -183,8 +180,9 @@ def main():
     G = nx.DiGraph() 
     data = [] 
 
+    
     if algoritmo in ["Dijkstra", "Bellman-Ford"]:
-        st.sidebar.markdown("<div class='highlight-box'><h3>✈️ Seleção de Rota</h3>", unsafe_allow_html=True)
+        st.sidebar.markdown(f"<div class='highlight-box'><h3>✈️ Seleção de Rota ({algoritmo} Pré-calculado)</h3>", unsafe_allow_html=True)
 
         with open(json_path, "r", encoding="utf-8") as f:
             data = json.load(f) 
@@ -228,18 +226,19 @@ def main():
                 edges_in_path = list(zip(path[:-1], path[1:]))
                 for (u, v) in G.edges():
                     if (u, v) in edges_in_path:
-                        G[u][v]["color"] = "#FFD700" # Dourado
+                        G[u][v]["color"] = "#FFD700" 
                         G[u][v]["width"] = 4
                 
                 if origem in G.nodes:
-                    G.nodes[origem]["color"] = "#00FF88" # Verde
+                    G.nodes[origem]["color"] = "#00FF88" 
                     G.nodes[origem]["size"] = 25
                 if destino in G.nodes:
-                    G.nodes[destino]["color"] = "#FF3366" # Vermelho
+                    G.nodes[destino]["color"] = "#FF3366" 
                     G.nodes[destino]["size"] = 25
 
             else:
                 st.error(f"❌ Nenhum caminho pré-calculado encontrado de {origem} para {destino} no arquivo JSON.")
+
 
     elif algoritmo in ["BFS", "DFS"]:
         with open(json_path, "r", encoding="utf-8") as f:
@@ -252,7 +251,6 @@ def main():
             edges_to_remove = [(u, v) for u, v, data in G.edges(data=True)
                                if "Ciclo" in data.get("label", "")]
             G.remove_edges_from(edges_to_remove)
-
 
 
     st.sidebar.subheader(" Métricas do Grafo (Visão Atual)")

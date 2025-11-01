@@ -55,14 +55,21 @@ def dijkstra(adj, src, dst):
 
 
 def main():
-    print("--- Iniciando busca por rotas longas (>= 4 passos) ---")
+    print("--- Iniciando busca por rotas 'todos para todos' ---")
     
     csv_file_path = '../../data/flight_filtrado.csv'
-    output_json_file = '../../out/percurso_voo_dijkstra.json'
+    output_json_file = '../../out/percurso_voo_dijkstra_todos_para_todos.json'
     
-    max_examples_to_find = 5
-    target_origin_countries = ['Brazil', 'Chile']
-    min_nos_no_caminho = 5
+    paises_desejados = [
+        "Algeria", "Argentina", "Australia", "Austria", "Brazil", "Belgium",
+        "Chile", "Columbia", "Dublin", "Egypt", "France", "Germany", "Greece",
+        "India", "Peru", "Rome", "Qatar", "Spain", "Turkey", "United Arab Emirates",
+        "United Kingdom", "Canada", "China", "Portugal", "Russia", "South Korea",
+        "United States", "Zurich", "Vietnam", "Denmark", "Ethiopia", "Indonesia",
+        "Kenya", "Japan", "Morocco", "Mexico", "Norway", "Philippines", "Malaysia",
+        "South Africa", "Singapore", "Thailand", "Taiwan", "Italy", "Netherlands",
+        "Panama", "Sweden"
+    ]
     
     adj = build_directed_graph(csv_file_path)
     
@@ -70,21 +77,25 @@ def main():
         print("ERRO: O grafo está vazio. Verifique 'flight_filtrado.csv'.")
         return
     
-    valid_origins = [c for c in target_origin_countries if c in adj]
-    if not valid_origins:
-        print(f"ERRO: Nenhum dos países de origem alvo {target_origin_countries} foi encontrado no grafo.")
-        return
+    paises_no_grafo = set(adj.keys())
+    paises_para_buscar = [p for p in paises_desejados if p in paises_no_grafo]
+    
+    paises_nao_encontrados = [p for p in paises_desejados if p not in paises_no_grafo]
+    if paises_nao_encontrados:
+        print(f"ATENÇÃO: Os seguintes países da lista não foram encontrados no grafo e serão ignorados:")
+        print(f"  {', '.join(paises_nao_encontrados)}")
+
+    print(f"\nIniciando busca de caminhos entre {len(paises_para_buscar)} países...")
 
     found_examples = []
-    all_countries = list(adj.keys())
+    total_rotas_calculadas = 0
 
-    for src_country in all_countries:
-        if src_country not in target_origin_countries:
-            continue
-        for dst_country in all_countries:
+    for src_country in paises_para_buscar:
+        for dst_country in paises_para_buscar:
             if src_country == dst_country:
                 continue
             
+            total_rotas_calculadas += 1
             tracemalloc.start() 
             start_time = time.time()  
             cost, path, flights, weights = dijkstra(adj, src_country, dst_country)
@@ -93,13 +104,15 @@ def main():
             tracemalloc.stop() 
             peak_memory_kb = peak / 1024  
 
-            if cost != float('inf') and len(path) >= min_nos_no_caminho:
+            if cost != float('inf'):
                 found_examples.append((cost, path, flights, weights, src_country, dst_country, exec_time, peak_memory_kb))
-                print(f"  ... Exemplo {len(found_examples)} encontrado: '{src_country}' -> '{dst_country}' ({len(path)-1} passos) em {exec_time:.6f}s, pico de memória: {peak_memory_kb:.2f} KB")
-                if len(found_examples) >= max_examples_to_find:
-                    break
-        if len(found_examples) >= max_examples_to_find:
-            break
+                
+                if len(found_examples) % 100 == 0:
+                    print(f"  ... {len(found_examples)} rotas válidas encontradas...")
+
+
+    print(f"\nBusca concluída. {total_rotas_calculadas} rotas potenciais verificadas.")
+    print(f"{len(found_examples)} rotas válidas (com caminho) foram encontradas.")
 
     json_results_list = []
     for i, example_data in enumerate(found_examples):
@@ -130,7 +143,7 @@ def main():
     try:
         with open(output_json_file, 'w', encoding='utf-8') as f:
             json.dump(json_results_list, f, ensure_ascii=False, indent=4)
-        print(f"\n✅ Arquivo JSON salvo com {len(json_results_list)} exemplos em '{output_json_file}'.")
+        print(f"\n✅ Arquivo JSON salvo com {len(json_results_list)} rotas em '{output_json_file}'.")
     except Exception as e:
         print(f"ERRO ao salvar o arquivo JSON: {e}")
 
