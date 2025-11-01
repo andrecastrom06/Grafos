@@ -140,14 +140,13 @@ def main():
     """, unsafe_allow_html=True)
 
     st.title("Visualizador dos vôos")
-    st.write("Explore dinamicamente os resultados dos algoritmos de grafos com estilo neon ⚡")
-
-    st.markdown("### ⚙️ Escolha o algoritmo para visualizar")
+    
+    st.markdown("###  Escolha o algoritmo para visualizar")
     
     algoritmos = {
         "BFS": "../out/percurso_voo_bfs.json",
         "DFS": "../out/percurso_voo_dfs.json",
-        "Dijkstra": "../out/percurso_voo_dijkstra_todos_para_todos.json", # CORRIGIDO
+        "Dijkstra": "../out/percurso_voo_dijkstra_todos_para_todos.json", 
         "Bellman-Ford": "../out/percurso_voo_bellman_ford.json"
     }
     
@@ -156,13 +155,15 @@ def main():
     algoritmo = st.selectbox("Selecione o algoritmo:", [""] + list(algoritmos.keys()), index=0)
 
     if algoritmo == "":
-        st.info("👈 Escolha um algoritmo acima para iniciar a visualização.")
+        st.info(" Escolha um algoritmo acima para iniciar a visualização.")
+        st.image("../../foto_capa.jpg", caption="Projeto de Grafos", use_container_width=True)
+        
         st.stop()
 
     json_path = algoritmos[algoritmo]
     
     if not os.path.exists(json_path):
-        st.error(f"❌ Arquivo não encontrado: {json_path}")
+        st.error(f"Arquivo não encontrado: {json_path}")
         st.write(f"Caminho absoluto verificado: {os.path.abspath(json_path)}")
         st.error(f"Verifique se o arquivo '{algoritmos[algoritmo]}' existe na pasta 'out'.")
         st.stop()
