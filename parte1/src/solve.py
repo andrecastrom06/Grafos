@@ -119,4 +119,4 @@ bairro_maior_grau_info = df_graus.iloc[0]
 print(f"Bairro mais denso: {bairro_mais_denso_info['bairro']} (Densidade Ego: {bairro_mais_denso_info['densidade_ego']})")
 print(f"Bairro com maior grau: {bairro_maior_grau_info['bairro']} (Grau: {bairro_maior_grau_info['grau']})")
 
-print("\n✅ Análise concluída com sucesso!")
+print("\nAnálise concluída com sucesso!")

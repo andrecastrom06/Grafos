@@ -6,14 +6,12 @@ import streamlit as st
 import streamlit.components.v1 as components
 from io import BytesIO
 
-# Configuração da página
 st.set_page_config(
     page_title="Grafo Recife", 
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# CSS personalizado
 st.markdown("""
 <style>
     .main-header {
@@ -58,7 +56,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# PRIMEIRO: Carregar os dados antes de usar no sidebar
 @st.cache_data
 def load_data():
     import unicodedata, re
@@ -71,16 +68,13 @@ def load_data():
         nome = unicodedata.normalize('NFKD', nome).encode('ASCII', 'ignore').decode('utf-8')
         return nome.title()
 
-    # Carrega os dados
     df_adj = pd.read_csv('../data/adjacencias_bairros.csv')
     df_info = pd.read_csv('../data/bairros_unique.csv')
 
-    # Normaliza nomes nos dois datasets
     for col in ['bairro_origem', 'bairro_destino']:
         df_adj[col] = df_adj[col].apply(normalizar_nome)
     df_info['bairro'] = df_info['bairro'].apply(normalizar_nome)
 
-    # Cria o dicionário de adjacências
     adj = {}
     for _, row in df_adj.iterrows():
         u = normalizar_nome(row['bairro_origem'])
@@ -88,7 +82,6 @@ def load_data():
         adj.setdefault(u, set()).add(v)
         adj.setdefault(v, set()).add(u)
 
-    # Calcula densidade (ego)
     densidade = {}
     for bairro, vizinhos in adj.items():
         k = len(vizinhos)
@@ -98,28 +91,24 @@ def load_data():
             links = sum(1 for u in vizinhos for v in vizinhos if u != v and v in adj.get(u, [])) / 2
             densidade[bairro] = links / (k * (k - 1) / 2)
 
-    # Carrega percurso (mantém original)
     with open('../out/percurso_nova_descoberta_setubal.json', encoding='utf-8') as f:
         percurso = json.load(f)
 
     return df_adj, df_info, adj, densidade, percurso
 
-# Carregar dados
 df_adj, df_info, adj, densidade, percurso = load_data()
 
 caminho = percurso['caminho']
 ruas = percurso.get('ruas', [])
 pesos = percurso.get('pesos', [])
 
-# AGORA podemos calcular totais para o sidebar
 total_bairros = len(df_info)
 total_arestas = sum(len(v) for v in adj.values()) // 2
 
-# Sidebar para informações e controles
 with st.sidebar:
     
     # Informações gerais
-    st.markdown("### 📊 Informações do Grafo")
+    st.markdown("### Informações do Grafo")
     
     col_metric1, col_metric2 = st.columns(2)
     with col_metric1:
@@ -129,20 +118,17 @@ with st.sidebar:
     
     st.markdown("---")
 
-# Layout principal
 col1, col2, col3 = st.columns([1, 3, 1])
 
 with col2:
     st.markdown('<h1 class="main-header">Projeto Grafos - Recife</h1>', unsafe_allow_html=True)
     
-    # Container da imagem de capa
     with st.container():
         st.image("../../foto_pt1.jpg", width=800)
         st.markdown("---")
 
-    # Container de seleção de visualização
     with st.container():
-        st.markdown("### 📈 Selecione o tipo de visualização")
+        st.markdown("### Selecione o tipo de visualização")
         opcao = st.selectbox(
             "Escolha a visualização:",
             ["", 
@@ -155,14 +141,12 @@ with col2:
         )
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # Função auxiliar
     def plot_to_bytes(fig):
         buf = BytesIO()
         fig.savefig(buf, format="png", bbox_inches="tight", dpi=300, transparent=True)
         buf.seek(0)
         return buf
 
-    # Visualizações
     if opcao == "Percurso Nova Descoberta → Boa Viagem":
         st.markdown('<h2 class="sub-header">Percurso Interativo</h2>', unsafe_allow_html=True)
         
@@ -175,7 +159,6 @@ with col2:
             with col3:
                 espessura = st.slider("Espessura das arestas", 1, 10, 3)
 
-        # Informações do percurso
         col_info1, col_info2, col_info3 = st.columns(3)
         with col_info1:
             st.metric("Bairros no percurso", len(caminho))
@@ -185,7 +168,6 @@ with col2:
         with col_info3:
             st.metric("Trechos", len(ruas))
 
-        # Rede interativa
         net = Network(height="600px", width="100%", directed=True, bgcolor="#ffffff", font_color="#333333")
         net.barnes_hut()
         
@@ -225,7 +207,6 @@ with col2:
             dens = densidade.get(bairro, 0)
             tooltip = f"Bairro: {bairro}; Grau: {grau}; Microrregião: {micro}; Densidade ego: {dens:.2f}"
 
-            # Gradiente de cor baseado no grau
             intensity = int(255 * (grau / max_degree))
             color_hex = f'rgb({100 + intensity}, {150}, {200 + intensity//2})'
 
@@ -240,11 +221,10 @@ with col2:
         components.html(html, height=700, scrolling=True)
 
     elif opcao == "Top 10 bairros por grau":
-        st.markdown('<h2 class="sub-header">🏆 Top 10 Bairros Mais Conectados</h2>', unsafe_allow_html=True)
+        st.markdown('<h2 class="sub-header">Top 10 Bairros Mais Conectados</h2>', unsafe_allow_html=True)
         
         top10 = sorted(adj.items(), key=lambda x: len(x[1]), reverse=True)[:10]
         
-        # Tabela informativa
         st.dataframe(
             pd.DataFrame([
                 {
@@ -276,7 +256,7 @@ with col2:
         components.html(html, height=600, scrolling=True)
 
     elif opcao == "Distribuição dos graus":
-        st.markdown('<h2 class="sub-header">📈 Distribuição dos Graus</h2>', unsafe_allow_html=True)
+        st.markdown('<h2 class="sub-header">Distribuição dos Graus</h2>', unsafe_allow_html=True)
         
         graus = [len(v) for v in adj.values()]
         
@@ -292,14 +272,12 @@ with col2:
 
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
         
-        # Histograma
         ax1.hist(graus, bins=range(1, max(graus)+2), color='#4ECDC4', edgecolor='black', alpha=0.7)
         ax1.set_xlabel("Grau do bairro")
         ax1.set_ylabel("Número de bairros")
         ax1.set_title("Distribuição dos graus dos bairros")
         ax1.grid(True, alpha=0.3)
         
-        # Boxplot
         ax2.boxplot(graus, vert=True, patch_artist=True, 
                    boxprops=dict(facecolor="#FF6B6B", alpha=0.7))
         ax2.set_ylabel("Grau")
@@ -310,7 +288,7 @@ with col2:
         st.pyplot(fig)
 
     elif opcao == "Buscar por bairro":
-        st.markdown('<h2 class="sub-header">🔍 Ego-grafo do Bairro</h2>', unsafe_allow_html=True)
+        st.markdown('<h2 class="sub-header">Ego-grafo do Bairro</h2>', unsafe_allow_html=True)
         
         col_search1, col_search2 = st.columns([2, 1])
         with col_search1:
@@ -319,7 +297,6 @@ with col2:
         if bairro_escolhido:
             vizinhos = adj[bairro_escolhido]
             
-            # Estatísticas do bairro selecionado
             grau_central = len(vizinhos)
             micro_central = df_info.loc[df_info['bairro'] == bairro_escolhido, 'microrregiao'].values[0] \
                             if bairro_escolhido in df_info['bairro'].values else "N/A"
@@ -338,12 +315,10 @@ with col2:
             net = Network(height="600px", width="100%", directed=False, bgcolor="#ffffff")
             net.barnes_hut()
 
-            # Bairro central
             tooltip_central = f"Bairro: {bairro_escolhido}<br>Grau: {grau_central}<br>Microrregião: {micro_central}<br>Densidade ego: {dens_central:.2f}"
             net.add_node(bairro_escolhido, label=bairro_escolhido, title=tooltip_central, 
                         color="#FF6B6B", size=40, font={'size': 20})
 
-            # Vizinhos
             for v in vizinhos:
                 grau = len(adj[v])
                 micro = df_info.loc[df_info['bairro'] == v, 'microrregiao'].values[0] \

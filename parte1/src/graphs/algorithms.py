@@ -4,7 +4,6 @@ import json
 import re
 
 def normalize_name(name):
-    # remove espaços extras e normaliza caixa
     return re.sub(r'\s+', ' ', str(name).strip().title())
 
 def load_graph(path):
@@ -16,7 +15,6 @@ def load_graph(path):
         w = float(row['peso']) if 'peso' in df.columns else 1.0
         log = str(row['logradouro']).strip() if 'logradouro' in df.columns else ''
         
-        # adiciona u -> v e v -> u garantido
         adj.setdefault(u, []).append((v, w, log))
         adj.setdefault(v, []).append((u, w, log))
     return adj

@@ -65,7 +65,7 @@ def main():
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(all_results, f, indent=4, ensure_ascii=False)
 
-    print(f"\n✅ Resultados BFS salvos em '{output_file}'.")
+    print(f"\nResultados BFS salvos em '{output_file}'.")
 
 if __name__ == "__main__":
     main()

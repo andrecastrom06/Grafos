@@ -58,7 +58,7 @@ def main():
     print("--- Iniciando busca por rotas 'todos para todos' ---")
     
     csv_file_path = '../../data/flight_filtrado.csv'
-    output_json_file = '../../out/percurso_voo_dijkstra_todos_para_todos.json'
+    output_json_file = '../../out/percurso_voo_dijkstra.json'
     
     paises_desejados = [
         "Algeria", "Argentina", "Australia", "Austria", "Brazil", "Belgium",
@@ -143,7 +143,7 @@ def main():
     try:
         with open(output_json_file, 'w', encoding='utf-8') as f:
             json.dump(json_results_list, f, ensure_ascii=False, indent=4)
-        print(f"\n✅ Arquivo JSON salvo com {len(json_results_list)} rotas em '{output_json_file}'.")
+        print(f"\nArquivo JSON salvo com {len(json_results_list)} rotas em '{output_json_file}'.")
     except Exception as e:
         print(f"ERRO ao salvar o arquivo JSON: {e}")
 

@@ -7,10 +7,6 @@ import os
 
 
 def create_networkx_graph(data: list, algoritmo: str) -> nx.DiGraph:
-    """
-    Lê os dados (lista de exemplos) e cria o objeto DiGraph do NetworkX.
-    Modificado para aceitar uma lista de dados, não um caminho de arquivo.
-    """
     G = nx.DiGraph()
     exemplos = data if isinstance(data, list) else [data]
 
@@ -60,7 +56,6 @@ def create_networkx_graph(data: list, algoritmo: str) -> nx.DiGraph:
 
 
 def create_pyvis_html(G: nx.DiGraph, physics_config: dict, cache_key: str) -> str:
-    """Cria a visualização do PyVis."""
     net = Network(
         height="750px",
         width="100%",
@@ -146,7 +141,7 @@ def main():
     algoritmos = {
         "BFS": "../out/percurso_voo_bfs.json",
         "DFS": "../out/percurso_voo_dfs.json",
-        "Dijkstra": "../out/percurso_voo_dijkstra_todos_para_todos.json", 
+        "Dijkstra": "../out/percurso_voo_dijkstra.json", 
         "Bellman-Ford": "../out/percurso_voo_bellman_ford.json"
     }
     
@@ -155,9 +150,12 @@ def main():
     algoritmo = st.selectbox("Selecione o algoritmo:", [""] + list(algoritmos.keys()), index=0)
 
     if algoritmo == "":
-        st.info(" Escolha um algoritmo acima para iniciar a visualização.")
-        st.image("../../foto_capa.jpg", caption="Projeto de Grafos", use_container_width=True)
-        
+        st.info("Escolha um algoritmo acima para iniciar a visualização.")
+
+        col1, col2, col3 = st.columns([1, 3, 1])
+        with col2:
+            st.image("../../foto_pt1.jpg", use_container_width=True)
+
         st.stop()
 
     json_path = algoritmos[algoritmo]
@@ -183,7 +181,7 @@ def main():
 
     
     if algoritmo in ["Dijkstra", "Bellman-Ford"]:
-        st.sidebar.markdown(f"<div class='highlight-box'><h3>✈️ Seleção de Rota ({algoritmo} Pré-calculado)</h3>", unsafe_allow_html=True)
+        st.sidebar.markdown(f"<div class='highlight-box'><h3>Seleção de Rota ({algoritmo} Pré-calculado)</h3>", unsafe_allow_html=True)
 
         with open(json_path, "r", encoding="utf-8") as f:
             data = json.load(f) 
@@ -223,7 +221,6 @@ def main():
                 st.info(" → ".join(path))
                 st.metric("Duração total (min)", f"{length:.1f}")
 
-                # Lógica de destaque
                 edges_in_path = list(zip(path[:-1], path[1:]))
                 for (u, v) in G.edges():
                     if (u, v) in edges_in_path:
@@ -238,7 +235,7 @@ def main():
                     G.nodes[destino]["size"] = 25
 
             else:
-                st.error(f"❌ Nenhum caminho pré-calculado encontrado de {origem} para {destino} no arquivo JSON.")
+                st.error(f"Nenhum caminho pré-calculado encontrado de {origem} para {destino} no arquivo JSON.")
 
 
     elif algoritmo in ["BFS", "DFS"]:
@@ -265,9 +262,6 @@ def main():
         html = f.read()
 
     st.components.v1.html(html, height=750, scrolling=False)
-
-    st.markdown("---")
-    st.caption("Projeto de grafos parte dois")
 
 
 if __name__ == "__main__":

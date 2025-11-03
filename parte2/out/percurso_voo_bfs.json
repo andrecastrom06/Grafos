@@ -52352,7 +52352,7 @@
                     "United States"
                 ]
             ],
-            "execution_time": 0.03466939926147461,
+            "execution_time": 0.018090009689331055,
             "peak_memory_kb": 823.8515625
         }
     },
@@ -103661,7 +103661,7 @@
                     "United States"
                 ]
             ],
-            "execution_time": 0.029876708984375,
+            "execution_time": 0.013451576232910156,
             "peak_memory_kb": 809.25
         }
     },
@@ -154446,7 +154446,7 @@
                     "Japan"
                 ]
             ],
-            "execution_time": 0.034670352935791016,
+            "execution_time": 0.014492511749267578,
             "peak_memory_kb": 802.6328125
         }
     }
