@@ -27,3 +27,17 @@ Entre na pasta Parte1 ou Parte2, rode os códigos python com o comando:
  - solve.py
  - viz.py
  - test_dijkstra.py
+
+# Parte 2
+ Rode na ordem abaixo para melhor resultado
+ - io.py
+ - graph.py
+ - dijkstra.py
+ - bellman_ford.py
+ - bfs.py
+ - dfs.py
+ - viz.py
+ - test_dijkstra.py
+ - test_bellman_ford.py
+ - test_bfs.py
+ - test_dfs.py

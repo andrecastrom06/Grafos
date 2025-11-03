@@ -1,6 +1,6 @@
 bairro_X,bairro_Y,custo,caminho,ruas
 Aflitos,Arruda,10.92,Aflitos->Gracas->Tamarineira->Alto Jose Do Pinho->Bomba Do Hemeterio->Arruda,Rua Angustura->Rua Coronel Uriel Sérgio Cardim->Rua Guimarães Peixoto->Rua das Hortas->Rua São Bento
-Ilha Do Retiro,Jordao,20.19,Ilha Do Retiro->Prado->Cordeiro->Iputinga->Varzea->Curado->Sancho->Tejipio->Barro->Cohab->Jordao,Rua Padre Gabriel Mousinho->Rua Formosa->Rua Coronel Fernando Furtado->Rua Emiliano Braga->Rua Historiador Luiz do Nascimento->Rua Orfeu do Carnaval->Avenida Padre Ibiapina->Rua da Esperança->Avenida Engenho Muribeca->Rua Estrela D`Oeste
+Ilha Do Retiro,Jordao,15.94,Ilha Do Retiro->Paissandu->Boa Vista->Santo Amaro->Torreao->Campo Grande->Peixinhos->Boa Viagem->Jordao,Ponte Prefeito Lima de Castro->Rua John Gustav Peter->Rua Conde D`Eu->Avenida Dr Jayme da Fonte->Rua Djalma Farias->Avenida Correia de Brito->Rua Limite de Município->Giradouro Felipe Camarão
 Recife,Santo Amaro,2.22,Recife->Santo Amaro,Rua Dr Ascânio Peixoto
 Linha Do Tiro,Vasco Da Gama,10.7,Linha Do Tiro->Agua Fria->Bomba Do Hemeterio->Alto Jose Do Pinho->Morro Da Conceicao->Vasco Da Gama,Rua Itapoana->Rua Antônio Meira->Rua das Hortas->Rua Alto Alegre->Rua Mocidade
 Nova Descoberta,Boa Viagem,15.1,Nova Descoberta->Vasco Da Gama->Morro Da Conceicao->Alto Jose Do Pinho->Bomba Do Hemeterio->Arruda->Peixinhos->Boa Viagem,Rua Arapiraca->Rua Mocidade->Rua Alto Alegre->Rua das Hortas->Rua São Bento->Rua Poeta Jayme Griz->Rua Limite de Município
