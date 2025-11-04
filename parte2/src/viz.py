@@ -154,7 +154,7 @@ def main():
 
         col1, col2, col3 = st.columns([1, 3, 1])
         with col2:
-            st.image("../../foto_pt1.jpg", use_container_width=True)
+            st.image("../../foto_pt2.jpg", use_container_width=True)
 
         st.stop()
 
