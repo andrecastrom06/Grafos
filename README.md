@@ -6,7 +6,7 @@ Este repositório contém as implementações e visualizações referentes ao pr
 https://classroom.google.com/c/NzkwNjEwMjU0NjU0/m/ODA1NTY4Nzg2NDY1/details
 
 📝 **Documento do Projeto:**  
-https://docs.google.com/document/d/1cT-DB87CaCkvR8u1D0YE7iK1xjn5yuJ8HWeLN1cv3xQ/edit?usp=sharing
+https://docs.google.com/document/d/1bywBUDUroaBQxf7mNpEZdKXXdXYfAN8bneuyTFZigc0/edit?usp=drivesdk
 
 ---
 
